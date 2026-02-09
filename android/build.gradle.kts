@@ -3,6 +3,10 @@ allprojects {
         google()
         mavenCentral()
     }
+    //  // Add these backup repositories
+    // maven { url 'https://maven.google.com' }
+    // maven { url 'https://jitpack.io' }
+    // maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 }
 
 val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()

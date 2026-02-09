@@ -31,7 +31,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  arcore_flutter_plugin: ^0.1.0
+  # arcore_flutter_plugin: ^0.1.0
   go_router: 
   flutter_riverpod: 
   vector_math: ^2.1.4
@@ -57,7 +57,15 @@ dependencies:
  # Utils
   intl: ^0.20.2
   uuid: ^4.3.3
-  # rive_splash_screen: ^0.1.1
+  # ar_flutter_plugin: ^0.7.3
+  # flutter_archive: ^6.0.4
+  # path_provider: ^2.1.5
+  # cloud_firestore: ^6.1.2
+  # firebase_core: ^4.4.0
+  # geoflutterfire_plus: ^0.0.34
+  # geolocator: ^9.0.2
+  # # rive_splash_screen: ^0.1.1
+  # permission_handler: ^11.3.1
 
 
 

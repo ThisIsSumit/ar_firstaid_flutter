@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'core/router/app_router.dart';
+
 import 'core/theme/app_theme.dart';
+import 'core/router/routes.dart';
 
 void main() {
-  
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set system UI overlay style
@@ -13,7 +13,7 @@ void main() {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF0A0A0F),
+      systemNavigationBarColor: Color(0xFF000000),
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
@@ -24,18 +24,18 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(const ProviderScope(child: ARFirstAidApp()));
+  runApp(const ProviderScope(child: LifeLens()));
 }
 
-class ARFirstAidApp extends ConsumerWidget {
-  const ARFirstAidApp({super.key});
+class LifeLens extends ConsumerWidget {
+  const LifeLens({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(appRouterProvider);
+    final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'AR First-Aid',
+      title: 'LifeLens',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       routerConfig: router,
