@@ -28,7 +28,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void _handleSignIn() {
-    if (!_formKey.currentState!.validate()) return;
+    // if (!_formKey.currentState!.validate()) return;
+    //set dummy data for tedting
+    _emailController.text = 'test@example.com';
+    _passwordController.text = 'password';
+
     ref
         .read(userProvider.notifier)
         .login(_emailController.text.trim(), _passwordController.text);

@@ -1,133 +1,135 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../core/router/app_router.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Setup fade animation
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+
+    _animationController.forward();
+
+    // Navigate to login after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        context.go(AppRoutes.login);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF000000), // Pure black background
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          // 1. Central Content (Logo & Text)
-          Column(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Sexy Logo with Pulse & Glow
+              // Your Logo or App Icon
               Container(
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF3B5C), // Vibrant Red
-                  borderRadius: BorderRadius.circular(32),
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFFFF2D55).withOpacity(0.8),
+                      const Color(0xFFFF453A),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF3B5C).withOpacity(0.3),
-                      blurRadius: 40,
-                      spreadRadius: 10,
-                    )
+                      color: const Color(0xFFFF2D55).withOpacity(0.4),
+                      blurRadius: 20,
+                      spreadRadius: 5,
+                    ),
                   ],
                 ),
                 child: const Icon(
-                  Icons.add_rounded,
+                  Icons.local_hospital_outlined,
+                  size: 50,
                   color: Colors.white,
-                  size: 80,
                 ),
-              )
-                  .animate(onPlay: (c) => c.repeat())
-                  .scale(
-                    begin: const Offset(1, 1),
-                    end: const Offset(1.05, 1.05),
-                    duration: 1.5.seconds,
-                    curve: Curves.easeInOut,
-                  )
-                  .then()
-                  .scale(begin: const Offset(1.05, 1.05), end: const Offset(1, 1))
-                  .animate() // Entrance animation
-                  .fadeIn(duration: 800.ms)
-                  .scale(begin: const Offset(0.8, 0.8)),
-
+              ),
               const SizedBox(height: 30),
-
-              // Brand Name
+              // App Title
               const Text(
                 'LifeLens',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 48,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: -1,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
                 ),
-              ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2),
-
-              // Sub-headline
+              ),
+              const SizedBox(height: 12),
+              // Subtitle
               Text(
-                'EMERGENCY RESPONSE',
+                'AR First Aid Assistant',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.4),
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 4,
+                  color: Colors.white.withOpacity(0.7),
+                  letterSpacing: 0.5,
                 ),
-              ).animate().fadeIn(delay: 700.ms).slideY(begin: 0.5),
+              ),
+              const SizedBox(height: 50),
+              // Loading Indicator
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    const Color(0xFFFF2D55).withOpacity(0.8),
+                  ),
+                  strokeWidth: 2.5,
+                ),
+              ),
+              const SizedBox(height: 30),
+              // Status text
+              Text(
+                'Loading...',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white.withOpacity(0.6),
+                  letterSpacing: 1,
+                ),
+              ),
             ],
           ),
-
-          // 2. Bottom Loading Section
-          Positioned(
-            bottom: 60,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                // Circular Spinner
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF3B5C)),
-                    backgroundColor: Colors.white.withOpacity(0.05),
-                  ),
-                ).animate().fadeIn(delay: 1.seconds),
-
-                const SizedBox(height: 40),
-
-                // Initializing Text
-                Text(
-                  'Initializing...',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ).animate(onPlay: (c) => c.repeat()).shimmer(duration: 2.seconds),
-
-                const SizedBox(height: 20),
-
-                // Linear Progress Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 100),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: LinearProgressIndicator(
-                      minHeight: 3,
-                      backgroundColor: Colors.white.withOpacity(0.1),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF3B5C)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

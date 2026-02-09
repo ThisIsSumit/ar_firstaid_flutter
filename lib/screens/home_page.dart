@@ -211,7 +211,7 @@ class HomeDashboard extends ConsumerWidget {
                   'Nearest available...',
                   Icons.favorite,
                   Colors.orange,
-                  onTap: () => context.push(AppRoutes.aedLocator),
+                  onTap: () => context.push(AppRoutes.aedMap),
                 ),
                 _buildQuickCard(
                   'Emergency Map',
