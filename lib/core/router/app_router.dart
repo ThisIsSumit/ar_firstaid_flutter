@@ -109,7 +109,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isLoggedIn && state.matchedLocation == AppRoutes.splash) {
         return userRole == UserRole.responder
             ? AppRoutes.responderHome
-            : AppRoutes.responderHome;
+            : AppRoutes.home;
       }
 
       return null;

@@ -89,9 +89,9 @@ class MainShell extends ConsumerWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school_outlined),
+            icon: Icon(Icons.map_outlined),
             activeIcon: Icon(Icons.school),
-            label: 'Training',
+            label: 'Network',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline),
