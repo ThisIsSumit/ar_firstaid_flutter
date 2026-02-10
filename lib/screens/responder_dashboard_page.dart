@@ -147,17 +147,14 @@ class ResponderDashboardPage extends ConsumerWidget {
           Icons.medical_services_rounded,
           const Color(0xFFFF3B5C),
         ),
-        GestureDetector(
-          onTap: () {
-            context.push(AppRoutes.earnings);
-          },
-          child: _buildStatCard(
-            'Earned',
-            '\$150',
-            Icons.payments_rounded,
-            Colors.orange,
-          ),
+
+        _buildStatCard(
+          'Earned',
+          '\$150',
+          Icons.payments_rounded,
+          Colors.orange,
         ),
+
         _buildStatCard('Rating', '4.9', Icons.star_rounded, Colors.amber),
         _buildStatCard('Avg ETA', '2.1m', Icons.timer_rounded, Colors.blue),
       ],
