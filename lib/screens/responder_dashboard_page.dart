@@ -1,7 +1,9 @@
+import 'package:ar_firstaid_flutter/core/router/app_router.dart';
 import 'package:ar_firstaid_flutter/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../core/providers/user_provider.dart';
 
@@ -25,7 +27,7 @@ class ResponderDashboardPage extends ConsumerWidget {
               const SizedBox(height: 25),
               _buildDutyStatusCard(ref, isOnDuty),
               const SizedBox(height: 20),
-              _buildStatsGrid(),
+              _buildStatsGrid(context),
               const SizedBox(height: 30),
               _buildSectionHeader('Coverage Area', null),
               const SizedBox(height: 15),
@@ -130,7 +132,7 @@ class ResponderDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsGrid() {
+  Widget _buildStatsGrid(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -145,11 +147,16 @@ class ResponderDashboardPage extends ConsumerWidget {
           Icons.medical_services_rounded,
           const Color(0xFFFF3B5C),
         ),
-        _buildStatCard(
-          'Earned',
-          '\$150',
-          Icons.payments_rounded,
-          Colors.orange,
+        GestureDetector(
+          onTap: () {
+            context.push(AppRoutes.earnings);
+          },
+          child: _buildStatCard(
+            'Earned',
+            '\$150',
+            Icons.payments_rounded,
+            Colors.orange,
+          ),
         ),
         _buildStatCard('Rating', '4.9', Icons.star_rounded, Colors.amber),
         _buildStatCard('Avg ETA', '2.1m', Icons.timer_rounded, Colors.blue),

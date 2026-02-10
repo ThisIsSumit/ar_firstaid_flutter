@@ -148,10 +148,7 @@ class ResponderShell extends ConsumerWidget {
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
-                  Icons.notifications_active_outlined,
-                  size: 24,
-                ),
+                child: const Icon(Icons.home_outlined, size: 24),
               ),
               activeIcon: Container(
                 padding: const EdgeInsets.all(6),
@@ -172,7 +169,7 @@ class ResponderShell extends ConsumerWidget {
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.location_on_outlined, size: 24),
+                child: const Icon(Icons.people_alt_outlined, size: 24),
               ),
               activeIcon: Container(
                 padding: const EdgeInsets.all(6),
@@ -180,9 +177,9 @@ class ResponderShell extends ConsumerWidget {
                   color: const Color(0xFF00C853).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.location_on, size: 24),
+                child: const Icon(Icons.people_alt, size: 24),
               ),
-              label: 'AED Map',
+              label: 'Community',
             ),
             BottomNavigationBarItem(
               icon: Container(

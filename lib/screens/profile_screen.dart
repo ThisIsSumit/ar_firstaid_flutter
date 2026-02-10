@@ -12,6 +12,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
+    final isResponder = ref.watch(isResponderProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -90,6 +91,11 @@ class ProfileScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 32),
+          // Withdraw Money Section (Responders Only)
+          if (isResponder) ...[
+            _WithdrawMoneyCard(onTap: () => context.push(AppRoutes.earnings)),
+            const SizedBox(height: 32),
+          ],
           // Menu Items
           _MenuItem(
             icon: Icons.person,
@@ -179,6 +185,92 @@ class _StatCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _WithdrawMoneyCard extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _WithdrawMoneyCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    const Color successGreen = Color(0xFF22C55E);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1A1A23), Color(0xFF0F0F15)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: successGreen.withOpacity(0.2), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: successGreen.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: successGreen.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.account_balance_wallet_rounded,
+                color: successGreen,
+                size: 28,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Earnings & Withdrawals',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'View earnings and withdraw funds',
+                    style: TextStyle(
+                      color: AppColors.textSecondary.withOpacity(0.8),
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: successGreen.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                color: successGreen,
+                size: 16,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

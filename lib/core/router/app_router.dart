@@ -3,6 +3,7 @@ import 'package:ar_firstaid_flutter/screens/aed_locator_screen.dart';
 import 'package:ar_firstaid_flutter/screens/become_responder_page.dart';
 import 'package:ar_firstaid_flutter/screens/certification_upload_page.dart';
 import 'package:ar_firstaid_flutter/screens/chat_page.dart';
+import 'package:ar_firstaid_flutter/screens/earnings_screen.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_card_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_confirmation_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_tracking_page.dart';
@@ -16,6 +17,7 @@ import 'package:ar_firstaid_flutter/screens/onboarding_screen.dart'
     hide OnboardingPage;
 import 'package:ar_firstaid_flutter/screens/profile_screen.dart';
 import 'package:ar_firstaid_flutter/screens/rate_emergency_page.dart';
+import 'package:ar_firstaid_flutter/screens/responder_community_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder_dashboard_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder_en_route_page.dart';
 import 'package:ar_firstaid_flutter/screens/settings_screen.dart';
@@ -63,7 +65,8 @@ class AppRoutes {
   static const String medicalProfile = '/medical-profile';
   static const String userProfile = '/user-profile';
   static const String aedLocatorStandalone = '/aed-standalone';
-
+  static const String earnings = '/earnings';
+  static const String responderCommunity = '/community';
   // Main Navigation - User Role
   static const String home = '/home';
   static const String aedMap = '/aed-map';
@@ -136,7 +139,9 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => context.go(AppRoutes.home),
+              onPressed: () => (userRole == UserRole.responder)
+                  ? context.go(AppRoutes.responderHome)
+                  : context.go(AppRoutes.home),
               child: const Text('Go Home'),
             ),
           ],
@@ -234,8 +239,9 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
       builder: (context, state) => const MedicalProfilePage(),
     ),
     GoRoute(
-      path: AppRoutes.profile,
-      builder: (context, state) => const ProfileScreen(), //responder
+      path: AppRoutes.earnings,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const EarningsScreen(),
     ),
 
     // Main Shell Routes (User Role)
@@ -290,10 +296,12 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                 routes: [
                   GoRoute(
                     path: 'settings',
+                    parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => const SettingsScreen(),
                   ),
                   GoRoute(
                     path: 'medical',
+                    parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => const MedicalProfilePage(),
                   ),
                 ],
@@ -324,12 +332,12 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
               ),
             ],
           ),
-          // AED Locator Branch (Shared)
+          // Community Branch
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.aedMap,
-                builder: (context, state) => const AEDLocatorScreen(),
+                path: AppRoutes.responderCommunity,
+                builder: (context, state) => const ResponderCommunityPage(),
               ),
             ],
           ),
@@ -360,6 +368,7 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                 routes: [
                   GoRoute(
                     path: 'settings',
+                    parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => const SettingsScreen(),
                   ),
                 ],
