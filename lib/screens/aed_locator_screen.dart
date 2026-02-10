@@ -23,7 +23,10 @@ class AEDLocatorScreen extends StatelessWidget {
               children: [
                 _buildCircularButton(Icons.arrow_back),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.6),
                     borderRadius: BorderRadius.circular(30),
@@ -31,7 +34,10 @@ class AEDLocatorScreen extends StatelessWidget {
                   ),
                   child: const Text(
                     'AED Locator',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 _buildCircularButton(Icons.more_horiz),
@@ -68,7 +74,7 @@ class AEDLocatorScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
+
                       // Header Section
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +95,10 @@ class AEDLocatorScreen extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(width: 8),
-                                    _buildStatusBadge('24/7 ACCESS', const Color(0xFF2E7D32)),
+                                    _buildStatusBadge(
+                                      '24/7 ACCESS',
+                                      const Color(0xFF2E7D32),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 8),
@@ -104,7 +113,10 @@ class AEDLocatorScreen extends StatelessWidget {
                                 const SizedBox(height: 4),
                                 Text(
                                   'Main Lobby • 150m away',
-                                  style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 16),
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.5),
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ],
                             ),
@@ -115,7 +127,11 @@ class AEDLocatorScreen extends StatelessWidget {
                               color: const Color(0xFFFFD600),
                               borderRadius: BorderRadius.circular(16),
                             ),
-                            child: const Icon(Icons.favorite, color: Colors.black, size: 28),
+                            child: const Icon(
+                              Icons.favorite,
+                              color: Colors.black,
+                              size: 28,
+                            ),
                           ),
                         ],
                       ).animate().fadeIn().slideY(begin: 0.1),
@@ -124,17 +140,31 @@ class AEDLocatorScreen extends StatelessWidget {
 
                       // Info Cards Row
                       Row(
-                        children: [
-                          _buildInfoCard(Icons.directions_walk, 'ETA WALK', '2 min'),
-                          const SizedBox(width: 12),
-                          _buildInfoCard(Icons.stairs, 'LOCATION', 'Level G'),
-                        ],
-                      ).animate().fadeIn(delay: 200.ms).scale(begin: const Offset(0.9, 0.9)),
+                            children: [
+                              _buildInfoCard(
+                                Icons.directions_walk,
+                                'ETA WALK',
+                                '2 min',
+                              ),
+                              const SizedBox(width: 12),
+                              _buildInfoCard(
+                                Icons.stairs,
+                                'LOCATION',
+                                'Level G',
+                              ),
+                            ],
+                          )
+                          .animate()
+                          .fadeIn(delay: 200.ms)
+                          .scale(begin: const Offset(0.9, 0.9)),
 
                       const SizedBox(height: 24),
 
                       // Directions Button
-                      _buildPrimaryButton().animate().shimmer(delay: 1.seconds, duration: 2.seconds),
+                      _buildPrimaryButton().animate().shimmer(
+                        delay: 1.seconds,
+                        duration: 2.seconds,
+                      ),
 
                       const SizedBox(height: 32),
 
@@ -153,12 +183,15 @@ class AEDLocatorScreen extends StatelessWidget {
                           ),
                           const Text(
                             'View All',
-                            style: TextStyle(color: Color(0xFFFF3053), fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              color: Color(0xFFFF3053),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
-                      
+
                       _buildNearbyItem(
                         'Public Library',
                         '450m • West Wing Entrance',
@@ -207,7 +240,11 @@ class AEDLocatorScreen extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -229,11 +266,19 @@ class AEDLocatorScreen extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 10, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   value,
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -255,7 +300,7 @@ class AEDLocatorScreen extends StatelessWidget {
             color: const Color(0xFFFF3053).withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
-          )
+          ),
         ],
       ),
       child: const Row(
@@ -265,14 +310,24 @@ class AEDLocatorScreen extends StatelessWidget {
           SizedBox(width: 12),
           Text(
             'START DIRECTIONS',
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildNearbyItem(String title, String subtitle, Color iconColor, String time, Color timeColor) {
+  Widget _buildNearbyItem(
+    String title,
+    String subtitle,
+    Color iconColor,
+    String time,
+    Color timeColor,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
@@ -292,11 +347,18 @@ class AEDLocatorScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 13),
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
@@ -310,7 +372,9 @@ class AEDLocatorScreen extends StatelessWidget {
             child: Text(
               time,
               style: TextStyle(
-                color: time == '24/7' ? const Color(0xFF2E7D32) : Colors.white.withOpacity(0.6),
+                color: time == '24/7'
+                    ? const Color(0xFF2E7D32)
+                    : Colors.white.withOpacity(0.6),
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
@@ -330,7 +394,9 @@ class MapPlaceholder extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage('https://i.stack.imgur.com/HILXv.png'), // Sample map image
+          image: NetworkImage(
+            'https://www.shutterstock.com/image-vector/city-map-navigation-gps-navigator-260nw-2449090905.jpg',
+          ), // Sample map image
           fit: BoxFit.cover,
         ),
       ),
@@ -345,9 +411,15 @@ class MapPlaceholder extends StatelessWidget {
           Positioned(
             top: 320,
             left: 200,
-            child: _buildMapPin(const Color(0xFFFFD600)).animate(onPlay: (c) => c.repeat())
-                .scale(begin: const Offset(1, 1), end: const Offset(1.2, 1.2), duration: 1.seconds)
-                .then().scale(begin: const Offset(1.2, 1.2), end: const Offset(1, 1)),
+            child: _buildMapPin(const Color(0xFFFFD600))
+                .animate(onPlay: (c) => c.repeat())
+                .scale(
+                  begin: const Offset(1, 1),
+                  end: const Offset(1.2, 1.2),
+                  duration: 1.seconds,
+                )
+                .then()
+                .scale(begin: const Offset(1.2, 1.2), end: const Offset(1, 1)),
           ),
         ],
       ),

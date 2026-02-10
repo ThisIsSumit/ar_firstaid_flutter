@@ -82,7 +82,7 @@ class ActiveEmergencyStatusPage extends ConsumerWidget {
 
   Widget _buildMapSection() {
     return Image.network(
-      'https://i.stack.imgur.com/HILXv.png',
+      'https://www.shutterstock.com/image-vector/city-map-navigation-gps-navigator-260nw-2449090905.jpg',
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,

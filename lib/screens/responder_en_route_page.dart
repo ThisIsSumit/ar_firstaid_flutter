@@ -14,7 +14,7 @@ class ResponderEnRoutePage extends StatelessWidget {
           // 1. Map Section
           Positioned.fill(
             child: Image.network(
-              'https://i.stack.imgur.com/HILXv.png', // Mock map tile
+              'https://www.shutterstock.com/image-vector/city-map-navigation-gps-navigator-260nw-2449090905.jpg', // Mock map tile
               fit: BoxFit.cover,
             ).animate().fadeIn(duration: 1.seconds),
           ),

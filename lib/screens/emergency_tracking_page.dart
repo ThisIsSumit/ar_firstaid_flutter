@@ -63,7 +63,7 @@ class EmergencyTrackingPage extends StatelessWidget {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                        'https://i.stack.imgur.com/HILXv.png',
+                        'https://www.shutterstock.com/image-vector/city-map-navigation-gps-navigator-260nw-2449090905.jpg',
                       ), // Mock map tile
                       fit: BoxFit.cover,
                       opacity: 0.7,
