@@ -1,16 +1,18 @@
+import 'package:ar_firstaid_flutter/core/providers/user_provider.dart';
 import 'package:ar_firstaid_flutter/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserProfilePage extends StatefulWidget {
+class UserProfilePage extends ConsumerStatefulWidget {
   const UserProfilePage({super.key});
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState();
+  ConsumerState<UserProfilePage> createState() => _UserProfilePageState();
 }
 
-class _UserProfilePageState extends State<UserProfilePage> {
+class _UserProfilePageState extends ConsumerState<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +27,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.white,
-                    size: 20,
+                  GestureDetector(
+                    onTap: () {
+                      context.pop();
+                    },
+                    child: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                   const Text(
                     'Profile',
@@ -213,7 +220,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        context.go(AppRoutes.becomeResponder);
+                        context.push(AppRoutes.becomeResponder);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -276,7 +283,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
               const SizedBox(height: 32),
               // Logout Button
               OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(userProvider.notifier).logout();
+                  context.go(AppRoutes.login);
+                },
                 icon: const Icon(Icons.logout, size: 18),
                 label: const Text(
                   'Logout',
@@ -285,6 +295,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: const Color(0xFFFF3B5C),
                   side: BorderSide(
+                    // ignore: deprecated_member_use
                     color: const Color(0xFFFF3B5C).withOpacity(0.2),
                     width: 1.5,
                   ),
@@ -292,6 +303,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),
+                  // ignore: deprecated_member_use
                   backgroundColor: const Color(0xFFFF3B5C).withOpacity(0.02),
                 ),
               ),

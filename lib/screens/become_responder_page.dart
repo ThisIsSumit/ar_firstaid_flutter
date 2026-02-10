@@ -295,7 +295,7 @@ class BecomeResponderPage extends StatelessWidget {
   Widget _buildGetStartedButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.go(AppRoutes.certificationUploadStandalone);
+        context.push(AppRoutes.certificationUploadStandalone);
       },
       child: Container(
         width: double.infinity,
@@ -307,6 +307,7 @@ class BecomeResponderPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
+              // ignore: deprecated_member_use
               color: const Color(0xFFFF3B5C).withOpacity(0.3),
               blurRadius: 20,
               offset: const Offset(0, 8),
