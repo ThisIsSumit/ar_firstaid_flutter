@@ -48,11 +48,14 @@ class UserNotifier extends StateNotifier<User?> {
     required String email,
     required String password,
     required String name,
+    bool isResponder = false,
   }) {
     state = User(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       email: email,
       name: name,
+      isResponder: isResponder,
+      isOnDuty: isResponder,
     );
   }
 

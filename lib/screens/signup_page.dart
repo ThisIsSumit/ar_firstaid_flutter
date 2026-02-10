@@ -22,6 +22,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   final _confirmController = TextEditingController();
   bool _obscurePassword = true;
   bool _agreedToTerms = false;
+  bool _signUpAsResponder = false;
 
   @override
   void dispose() {
@@ -47,8 +48,15 @@ class _SignupPageState extends ConsumerState<SignupPage> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
           name: _nameController.text.trim(),
+          isResponder: _signUpAsResponder,
         );
-    context.go(AppRoutes.home);
+
+    // Redirect based on role
+    if (_signUpAsResponder) {
+      context.go(AppRoutes.responderHome);
+    } else {
+      context.go(AppRoutes.home);
+    }
   }
 
   @override
@@ -137,6 +145,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
                 const SizedBox(height: 30),
                 _buildTermsCheckbox(),
+
+                const SizedBox(height: 20),
+                _buildResponderToggle(),
 
                 const SizedBox(height: 40),
                 _buildSignUpButton(),
@@ -428,5 +439,79 @@ class _SignupPageState extends ConsumerState<SignupPage> {
         ),
       ),
     ).animate().fadeIn(delay: 800.ms);
+  }
+
+  Widget _buildResponderToggle() {
+    return GestureDetector(
+      onTap: () => setState(() => _signUpAsResponder = !_signUpAsResponder),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _signUpAsResponder
+              ? const Color(0xFFFF3B5C).withOpacity(0.1)
+              : const Color(0xFF1A1919),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: _signUpAsResponder
+                ? const Color(0xFFFF3B5C)
+                : Colors.white.withOpacity(0.08),
+            width: _signUpAsResponder ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: _signUpAsResponder
+                    ? const Color(0xFFFF3B5C)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: _signUpAsResponder
+                      ? const Color(0xFFFF3B5C)
+                      : Colors.white.withOpacity(0.2),
+                ),
+              ),
+              child: _signUpAsResponder
+                  ? const Icon(Icons.check, color: Colors.white, size: 16)
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Sign up as Emergency Responder',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Help save lives by responding to emergencies in your area',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.medical_services_rounded,
+              color: _signUpAsResponder
+                  ? const Color(0xFFFF3B5C)
+                  : Colors.white.withOpacity(0.3),
+              size: 28,
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(delay: 700.ms).slideY(begin: 0.1);
   }
 }

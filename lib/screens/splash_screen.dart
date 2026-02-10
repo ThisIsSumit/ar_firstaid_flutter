@@ -35,7 +35,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // Navigate to login after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.go(AppRoutes.login);
+        context.go(AppRoutes.onboardingAlt);
       }
     });
   }

@@ -31,10 +31,7 @@ class ResponderShell extends ConsumerWidget {
                 ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF00C853),
-                      const Color(0xFF00A842),
-                    ],
+                    colors: [const Color(0xFF00C853), const Color(0xFF00A842)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -151,7 +148,10 @@ class ResponderShell extends ConsumerWidget {
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.notifications_active_outlined, size: 24),
+                child: const Icon(
+                  Icons.notifications_active_outlined,
+                  size: 24,
+                ),
               ),
               activeIcon: Container(
                 padding: const EdgeInsets.all(6),
@@ -159,9 +159,9 @@ class ResponderShell extends ConsumerWidget {
                   color: const Color(0xFF00C853).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.notifications_active, size: 24),
+                child: const Icon(Icons.home_filled, size: 24),
               ),
-              label: 'On Duty',
+              label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Container(

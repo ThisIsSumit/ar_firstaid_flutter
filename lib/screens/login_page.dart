@@ -29,14 +29,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void _handleSignIn() {
     // if (!_formKey.currentState!.validate()) return;
-    //set dummy data for tedting
+    //set dummy data for testing
     _emailController.text = 'test@example.com';
     _passwordController.text = 'password';
 
     ref
         .read(userProvider.notifier)
         .login(_emailController.text.trim(), _passwordController.text);
-    context.go(AppRoutes.home);
+
+    // Redirect based on user role
+    final user = ref.read(userProvider);
+    if (user?.isResponder ?? false) {
+      context.go(AppRoutes.responderHome);
+    } else {
+      context.go(AppRoutes.home);
+    }
   }
 
   @override
@@ -219,6 +226,57 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     _socialButton(Icons.phone_iphone_rounded),
                   ],
                 ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.2),
+
+                const SizedBox(height: 32),
+
+                // Responder Login Option
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      _emailController.text = 'responder@example.com';
+                      _passwordController.text = 'password';
+                      ref
+                          .read(userProvider.notifier)
+                          .loginAsResponder(
+                            _emailController.text.trim(),
+                            _passwordController.text,
+                          );
+                      context.go(AppRoutes.responderHome);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF3B5C).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color(0xFFFF3B5C).withOpacity(0.3),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.medical_services_rounded,
+                            color: Color(0xFFFF3B5C),
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Login as Emergency Responder',
+                            style: TextStyle(
+                              color: Color(0xFFFF3B5C),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ).animate().fadeIn(delay: 700.ms),
 
                 const SizedBox(height: 40),
 

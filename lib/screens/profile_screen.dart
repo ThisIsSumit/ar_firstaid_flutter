@@ -94,7 +94,7 @@ class ProfileScreen extends ConsumerWidget {
           _MenuItem(
             icon: Icons.person,
             title: 'Edit Profile',
-            onTap: () => context.push(AppRoutes.userProfile),
+            onTap: () => context.push('${AppRoutes.profile}/settings'),
           ),
           _MenuItem(
             icon: Icons.notifications,

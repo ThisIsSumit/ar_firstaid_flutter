@@ -310,7 +310,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
@@ -372,68 +371,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
           );
         }),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      padding: const EdgeInsets.only(top: 15, bottom: 25),
-      decoration: const BoxDecoration(
-        color: Color(0xFF0A0A0F),
-        border: Border(top: BorderSide(color: Colors.white10)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home_filled, 'Home', false),
-          _buildNavItem(Icons.map_outlined, 'Network', false),
-          _buildSOSButton(),
-          _buildNavItem(Icons.chat_bubble_outline_rounded, 'Messages', false),
-          _buildNavItem(Icons.person, 'Profile', true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool active) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: active ? const Color(0xFFFF3B5C) : Colors.white24),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: active ? const Color(0xFFFF3B5C) : Colors.white24,
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSOSButton() {
-    return Container(
-      height: 54,
-      width: 54,
-      decoration: const BoxDecoration(
-        color: Color(0xFFFF3B5C),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(color: Color(0xFFFF3B5C), blurRadius: 15, spreadRadius: 1),
-        ],
-      ),
-      child: const Center(
-        child: Text(
-          'SOS',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            fontSize: 14,
-          ),
-        ),
       ),
     );
   }

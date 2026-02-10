@@ -72,38 +72,110 @@ class MainShell extends ConsumerWidget {
           Expanded(child: navigationShell),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        onTap: (index) => navigationShell.goBranch(
-          index,
-          initialLocation: index == navigationShell.currentIndex,
-        ),
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.primaryRed,
-        unselectedItemColor: AppColors.textSecondary,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: _buildBottomNav(context),
+    );
+  }
+
+  Widget _buildBottomNav(BuildContext context) {
+    final currentIndex = navigationShell.currentIndex;
+
+    return Container(
+      padding: const EdgeInsets.only(top: 15, bottom: 25),
+      decoration: const BoxDecoration(
+        color: Color(0xFF0A0A0F),
+        border: Border(top: BorderSide(color: Colors.white10)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem(
+            context,
+            Icons.home_filled,
+            'Home',
+            currentIndex == 0,
+            () => navigationShell.goBranch(0),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
-            activeIcon: Icon(Icons.school),
-            label: 'Network',
+          _buildNavItem(
+            context,
+            Icons.map_outlined,
+            'Network',
+            currentIndex == 1,
+            () => navigationShell.goBranch(1),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            activeIcon: Icon(Icons.chat_bubble),
-            label: 'Messages',
+          _buildSOSButton(context),
+          _buildNavItem(
+            context,
+            Icons.chat_bubble_outline_rounded,
+            'Messages',
+            currentIndex == 2,
+            () => navigationShell.goBranch(2),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
+          _buildNavItem(
+            context,
+            Icons.person,
+            'Profile',
+            currentIndex == 3,
+            () => navigationShell.goBranch(3),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    bool active,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: active ? const Color(0xFFFF3B5C) : Colors.white24),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: active ? const Color(0xFFFF3B5C) : Colors.white24,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSOSButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.emergencySelector),
+      child: Container(
+        height: 54,
+        width: 54,
+        decoration: const BoxDecoration(
+          color: Color(0xFFFF3B5C),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFFFF3B5C),
+              blurRadius: 15,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Text(
+            'SOS',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+              fontSize: 14,
+            ),
+          ),
+        ),
       ),
     );
   }

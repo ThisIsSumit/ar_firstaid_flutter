@@ -11,7 +11,9 @@ import 'package:ar_firstaid_flutter/screens/home_page.dart';
 import 'package:ar_firstaid_flutter/screens/login_page.dart';
 import 'package:ar_firstaid_flutter/screens/medical_profile_page.dart';
 import 'package:ar_firstaid_flutter/screens/messages_inbox.dart';
-import 'package:ar_firstaid_flutter/screens/onboarding_screen.dart';
+import 'package:ar_firstaid_flutter/screens/onboarding_page.dart';
+import 'package:ar_firstaid_flutter/screens/onboarding_screen.dart'
+    hide OnboardingPage;
 import 'package:ar_firstaid_flutter/screens/profile_screen.dart';
 import 'package:ar_firstaid_flutter/screens/rate_emergency_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder_dashboard_page.dart';
@@ -22,6 +24,7 @@ import 'package:ar_firstaid_flutter/screens/signup_page.dart';
 import 'package:ar_firstaid_flutter/screens/splash_screen.dart';
 import 'package:ar_firstaid_flutter/screens/treatment_logging_page.dart';
 import 'package:ar_firstaid_flutter/screens/user_profile_page.dart';
+import 'package:ar_firstaid_flutter/widgets/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +32,6 @@ import 'package:go_router/go_router.dart';
 import '../providers/user_provider.dart';
 import '../providers/emergency_provider.dart';
 import '../providers/role_provider.dart';
-import '../../widgets/main_shell.dart';
 import '../../widgets/responder_shell.dart';
 
 // Route Constants
@@ -76,17 +78,22 @@ class AppRoutes {
   static const String messagesLegacy = '/messages-legacy';
 }
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final routerProvider = Provider<GoRouter>((ref) {
   final isLoggedIn = ref.watch(isLoggedInProvider);
   final userRole = ref.watch(userRoleProvider);
-  final emergencyState = ref.watch(emergencyProvider);
+  final isEmergencyActive = ref.watch(
+    emergencyProvider.select((state) => state.isActive),
+  );
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,
     redirect: (context, state) {
       // Emergency override: force navigate to active emergency
-      if (emergencyState.isActive &&
+      if (isEmergencyActive &&
           state.matchedLocation != AppRoutes.activeEmergency &&
           state.matchedLocation != AppRoutes.emergencyTracking &&
           !state.matchedLocation.startsWith(AppRoutes.responderFlow)) {
@@ -148,7 +155,11 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
     ),
     GoRoute(
       path: AppRoutes.onboarding,
-      builder: (context, state) => const OnboardingScreen(),
+      builder: (context, state) => OnboardingPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.onboardingAlt,
+      builder: (context, state) => OnboardingScreen(),
     ),
 
     GoRoute(
@@ -162,27 +173,28 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
 
     // Emergency Flow Routes (Full Screen)
     GoRoute(
-      path: AppRoutes.responderHome,
-      builder: (context, state) => const ResponderDashboardPage(),
-    ),
-    GoRoute(
       path: AppRoutes.emergencySelector,
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const EmergencyTypePage(),
     ),
     GoRoute(
       path: AppRoutes.severitySelector,
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const SeveritySelectorPage(),
     ),
     GoRoute(
       path: AppRoutes.emergencyConfirmation,
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const EmergencyConfirmationPage(),
     ),
     GoRoute(
       path: AppRoutes.activeEmergency,
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const ActiveEmergencyStatusPage(),
     ),
     GoRoute(
       path: AppRoutes.emergencyTracking,
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const EmergencyTrackingPage(),
     ),
 
@@ -222,8 +234,8 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
       builder: (context, state) => const MedicalProfilePage(),
     ),
     GoRoute(
-      path: AppRoutes.userProfile,
-      builder: (context, state) => const UserProfilePage(),
+      path: AppRoutes.profile,
+      builder: (context, state) => const ProfileScreen(), //responder
     ),
 
     // Main Shell Routes (User Role)
@@ -273,8 +285,8 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.profile,
-                builder: (context, state) => const ProfileScreen(),
+                path: AppRoutes.userProfile,
+                builder: (context, state) => const UserProfilePage(),
                 routes: [
                   GoRoute(
                     path: 'settings',
