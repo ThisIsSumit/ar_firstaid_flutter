@@ -23,7 +23,7 @@ class ResponderDashboardPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              _buildHeader(user),
+              _buildHeader(user, context),
               const SizedBox(height: 25),
               _buildDutyStatusCard(ref, isOnDuty),
               const SizedBox(height: 20),
@@ -44,7 +44,7 @@ class ResponderDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(User? user) {
+  Widget _buildHeader(User? user, BuildContext context) {
     return Row(
       children: [
         const CircleAvatar(
@@ -73,7 +73,10 @@ class ResponderDashboardPage extends ConsumerWidget {
           ],
         ),
         const Spacer(),
-        _buildCircleIconButton(Icons.notifications_none_rounded),
+        _buildCircleIconButton(
+          Icons.notifications_none_rounded,
+          onTap: () => context.push(AppRoutes.responderNotifications),
+        ),
       ],
     );
   }
@@ -400,14 +403,18 @@ class ResponderDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildCircleIconButton(IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        shape: BoxShape.circle,
+  Widget _buildCircleIconButton(IconData icon, {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.05),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.white, size: 22),
       ),
-      child: Icon(icon, color: Colors.white, size: 22),
     );
   }
 }

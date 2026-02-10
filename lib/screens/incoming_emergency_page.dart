@@ -46,7 +46,7 @@ class _IncomingEmergencyPageState extends State<IncomingEmergencyPage> {
     return Scaffold(
       backgroundColor: scaffoldBg,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
@@ -54,17 +54,17 @@ class _IncomingEmergencyPageState extends State<IncomingEmergencyPage> {
               // 1. Emergency Incoming Header
               _buildIncomingHeader(primaryRed),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
               // 2. Circular Countdown
               _buildCountdownTimer(primaryRed),
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
 
               // 3. Emergency Details Card
               _buildDetailsCard(cardBg, primaryRed),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // 4. Info Row (Arrival & Equipment)
               Row(
@@ -75,7 +75,7 @@ class _IncomingEmergencyPageState extends State<IncomingEmergencyPage> {
                 ],
               ),
 
-              const Spacer(),
+              const SizedBox(height: 30),
 
               // 5. Action Buttons
               _buildActionButton(
@@ -244,7 +244,9 @@ class _IncomingEmergencyPageState extends State<IncomingEmergencyPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               image: const DecorationImage(
-                image: NetworkImage('https://i.ibb.co/L5hY6K8/dark-forest-map.png'),
+                image: NetworkImage(
+                  'https://www.shutterstock.com/image-vector/city-map-navigation-gps-navigator-260nw-2449090905.jpg',
+                ),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
               ),
@@ -252,35 +254,42 @@ class _IncomingEmergencyPageState extends State<IncomingEmergencyPage> {
             child: Stack(
               children: [
                 Center(
-                  child: Container(
-                    width: 14,
-                    height: 14,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFFF3B5C),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ).animate(onPlay: (c) => c.repeat()).scale(
-                        begin: const Offset(1, 1),
-                        end: const Offset(2.5, 2.5),
-                        duration: 1.5.seconds,
-                        curve: Curves.easeOut,
-                      ).fadeOut(),
+                  child:
+                      Container(
+                            width: 14,
+                            height: 14,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFF3B5C),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          )
+                          .animate(onPlay: (c) => c.repeat())
+                          .scale(
+                            begin: const Offset(1, 1),
+                            end: const Offset(2.5, 2.5),
+                            duration: 1.5.seconds,
+                            curve: Curves.easeOut,
+                          )
+                          .fadeOut(),
                 ),
                 Positioned(
                   bottom: 12,
                   left: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(8),
@@ -347,18 +356,20 @@ class _IncomingEmergencyPageState extends State<IncomingEmergencyPage> {
     bool isOutlined = false,
   }) {
     return Container(
-      width: double.infinity,
-      height: 72,
+      width: MediaQuery.of(context).size.width / 1.5,
+      height: 52,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: !isOutlined ? [
-          BoxShadow(
-            color: color.withOpacity(0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          )
-        ] : null,
+        boxShadow: !isOutlined
+            ? [
+                BoxShadow(
+                  color: color.withOpacity(0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ]
+            : null,
       ),
       child: Material(
         color: Colors.transparent,

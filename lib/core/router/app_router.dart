@@ -9,6 +9,7 @@ import 'package:ar_firstaid_flutter/screens/emergency_confirmation_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_tracking_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_type_page.dart';
 import 'package:ar_firstaid_flutter/screens/home_page.dart';
+import 'package:ar_firstaid_flutter/screens/incoming_emergency_page.dart';
 import 'package:ar_firstaid_flutter/screens/login_page.dart';
 import 'package:ar_firstaid_flutter/screens/medical_profile_page.dart';
 import 'package:ar_firstaid_flutter/screens/messages_inbox.dart';
@@ -20,6 +21,7 @@ import 'package:ar_firstaid_flutter/screens/rate_emergency_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder_community_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder_dashboard_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder_en_route_page.dart';
+import 'package:ar_firstaid_flutter/screens/responder_notifications_page.dart';
 import 'package:ar_firstaid_flutter/screens/settings_screen.dart';
 import 'package:ar_firstaid_flutter/screens/severity_selector_page.dart';
 import 'package:ar_firstaid_flutter/screens/signup_page.dart';
@@ -58,6 +60,8 @@ class AppRoutes {
   static const String responderEnRoute = '/responder-en-route';
   static const String treatmentLogging = '/treatment-logging';
   static const String rateEmergency = '/rate-emergency';
+  static const String incomingEmergency = '/incoming-emergency';
+  static const String responderNotifications = '/responder-notifications';
 
   // Standalone Routes
   static const String becomeResponder = '/become-responder';
@@ -216,6 +220,16 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
       path: AppRoutes.rateEmergency,
       builder: (context, state) => const RateEmergencyPage(),
     ),
+    GoRoute(
+      path: AppRoutes.incomingEmergency,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const IncomingEmergencyPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.responderNotifications,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const ResponderNotificationsPage(),
+    ),
 
     // Other Full Screen Routes
     GoRoute(
@@ -327,6 +341,12 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                   GoRoute(
                     path: 'history',
                     builder: (context, state) => const TreatmentLoggingPage(),
+                  ),
+                  GoRoute(
+                    path: 'notifications',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) =>
+                        const ResponderNotificationsPage(),
                   ),
                 ],
               ),
