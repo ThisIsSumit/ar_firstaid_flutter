@@ -37,17 +37,21 @@ class EmergencyTrackingPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
-                const Text(
-                  '🚨 EMERGENCY ACTIVE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    '🚨 EMERGENCY ACTIVE',
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                    ),
                   ),
                 ),
-                const Spacer(flex: 2),
+                const SizedBox(width: 36),
               ],
             ),
           ),
@@ -133,16 +137,19 @@ class EmergencyTrackingPage extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Responders en route',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
+                                const Expanded(
+                                  child: Text(
+                                    'Responders en route',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
+                                const SizedBox(width: 10),
                                 _buildLiveTrackingBadge(),
                               ],
                             ),
@@ -171,57 +178,59 @@ class EmergencyTrackingPage extends StatelessWidget {
             flex: 5,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-              child: Column(
-                children: [
-                  _buildTimelineItem(
-                    title: 'Emergency Triggered',
-                    subtitle: '12:01 PM • Location verified',
-                    icon: Icons.check_circle,
-                    iconColor: const Color(0xFF22C55E),
-                    isActive: true,
-                    showLine: true,
-                  ),
-                  _buildTimelineItem(
-                    title: '911 Dispatched',
-                    subtitle: '12:02 PM • Reference ID #8291',
-                    icon: Icons.check_circle,
-                    iconColor: const Color(0xFF22C55E),
-                    isActive: true,
-                    showLine: true,
-                  ),
-                  _buildTimelineItem(
-                    title: '5 Responders Notified',
-                    subtitle: 'Tracking closest unit...',
-                    icon: Icons.group,
-                    iconColor: const Color(0xFFFF3B5C),
-                    isActive: false,
-                    isPulse: true,
-                    showLine: false,
-                  ),
-                  const Spacer(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildTimelineItem(
+                      title: 'Emergency Triggered',
+                      subtitle: '12:01 PM • Location verified',
+                      icon: Icons.check_circle,
+                      iconColor: const Color(0xFF22C55E),
+                      isActive: true,
+                      showLine: true,
+                    ),
+                    _buildTimelineItem(
+                      title: '911 Dispatched',
+                      subtitle: '12:02 PM • Reference ID #8291',
+                      icon: Icons.check_circle,
+                      iconColor: const Color(0xFF22C55E),
+                      isActive: true,
+                      showLine: true,
+                    ),
+                    _buildTimelineItem(
+                      title: '5 Responders Notified',
+                      subtitle: 'Tracking closest unit...',
+                      icon: Icons.group,
+                      iconColor: const Color(0xFFFF3B5C),
+                      isActive: false,
+                      isPulse: true,
+                      showLine: false,
+                    ),
+                    const SizedBox(height: 12),
 
-                  // Cancel Button
-                  _HoldToCancelButton(),
+                    // Cancel Button
+                    _HoldToCancelButton(),
 
-                  const SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
-                  // Bottom Actions
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildBottomAction(Icons.call, 'CALL 911'),
-                      _buildBottomAction(
-                        Icons.contact_emergency_rounded,
-                        'CONTACTS',
-                      ),
-                      _buildBottomAction(
-                        Icons.medical_services_rounded,
-                        'MED INFO',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                ],
+                    // Bottom Actions
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildBottomAction(Icons.call, 'CALL 911'),
+                        _buildBottomAction(
+                          Icons.contact_emergency_rounded,
+                          'CONTACTS',
+                        ),
+                        _buildBottomAction(
+                          Icons.medical_services_rounded,
+                          'MED INFO',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
               ),
             ),
           ),
