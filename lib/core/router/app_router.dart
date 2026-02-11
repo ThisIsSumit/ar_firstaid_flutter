@@ -1,5 +1,6 @@
 import 'package:ar_firstaid_flutter/screens/active_emergency_status_page.dart';
 import 'package:ar_firstaid_flutter/screens/aed_locator_screen.dart';
+import 'package:ar_firstaid_flutter/screens/application_success_page.dart';
 import 'package:ar_firstaid_flutter/screens/become_responder_page.dart';
 import 'package:ar_firstaid_flutter/screens/certification_upload_page.dart';
 import 'package:ar_firstaid_flutter/screens/chat_page.dart';
@@ -8,7 +9,9 @@ import 'package:ar_firstaid_flutter/screens/emergency_card_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_confirmation_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_tracking_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_type_page.dart';
+import 'package:ar_firstaid_flutter/screens/ethics_agreement_page.dart';
 import 'package:ar_firstaid_flutter/screens/home_page.dart';
+import 'package:ar_firstaid_flutter/screens/identity_verification_page.dart';
 import 'package:ar_firstaid_flutter/screens/incoming_emergency_page.dart';
 import 'package:ar_firstaid_flutter/screens/login_page.dart';
 import 'package:ar_firstaid_flutter/screens/medical_profile_page.dart';
@@ -71,6 +74,11 @@ class AppRoutes {
   static const String aedLocatorStandalone = '/aed-standalone';
   static const String earnings = '/earnings';
   static const String responderCommunity = '/community';
+
+  static const String responderIdentity = '/responder-identity';
+  static const String responderEthics = '/responder-ethics';
+  static const String responderSuccess = '/responder-success';
+
   // Main Navigation - User Role
   static const String home = '/home';
   static const String aedMap = '/aed-map';
@@ -247,6 +255,21 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
     GoRoute(
       path: AppRoutes.certificationUploadStandalone,
       builder: (context, state) => const CertificationUploadPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.responderIdentity,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const IdentityVerificationPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.responderEthics,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const EthicsAgreementPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.responderSuccess,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const ApplicationSuccessPage(),
     ),
     GoRoute(
       path: AppRoutes.medicalProfile,
