@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/providers/emergency_provider.dart';
-import '../core/router/app_router.dart';
+import '../../../core/providers/emergency_provider.dart';
+import '../../../core/router/app_router.dart';
 
 class EmergencyTypePage extends ConsumerWidget {
   const EmergencyTypePage({super.key});

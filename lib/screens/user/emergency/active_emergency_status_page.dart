@@ -3,9 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/providers/emergency_provider.dart';
-import '../core/router/app_router.dart';
-import '../widgets/dialogs/emergency_dialogs.dart';
+import '../../../core/providers/emergency_provider.dart';
+import '../../../core/router/app_router.dart';
+import '../../../widgets/dialogs/emergency_dialogs.dart';
 
 class ActiveEmergencyStatusPage extends ConsumerWidget {
   const ActiveEmergencyStatusPage({super.key});
