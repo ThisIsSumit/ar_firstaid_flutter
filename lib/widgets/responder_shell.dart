@@ -190,7 +190,7 @@ class ResponderShell extends ConsumerWidget {
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.chat_bubble_outlined, size: 24),
+                child: const Icon(Icons.chat_bubble_outline_outlined, size: 24),
               ),
               activeIcon: Container(
                 padding: const EdgeInsets.all(6),
