@@ -145,12 +145,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   obscureText: _obscurePassword,
                   onTogglePassword: () =>
                       setState(() => _obscurePassword = !_obscurePassword),
-                  trailing: Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: const Color(0xFFFF3B5C),
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                  trailing: GestureDetector(
+                    onTap: () => context.push('/forgot-password'),
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Color(0xFFFF3B5C),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

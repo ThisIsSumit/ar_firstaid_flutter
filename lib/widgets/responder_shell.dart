@@ -200,7 +200,7 @@ class ResponderShell extends ConsumerWidget {
                 ),
                 child: const Icon(Icons.chat_bubble, size: 24),
               ),
-              label: 'Messages',
+              label: 'Rewards',
             ),
             BottomNavigationBarItem(
               icon: Container(

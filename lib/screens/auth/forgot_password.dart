@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+import '../../core/providers/password_reset_provider.dart';
+
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   late AnimationController _animationController;
@@ -32,26 +37,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
       ),
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _iconRotateAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.elasticOut,
-      ),
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
     );
 
     _emailController.addListener(() {
       setState(() {
-        _isButtonEnabled = _emailController.text.isNotEmpty;
+        _isButtonEnabled =
+            _emailController.text.isNotEmpty &&
+            _emailController.text.contains('@');
       });
     });
 
@@ -65,6 +67,40 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     super.dispose();
   }
 
+  void _handleSendLink() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please enter your email')));
+      return;
+    }
+
+    if (!email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
+    final success = await ref
+        .read(passwordResetProvider.notifier)
+        .sendResetCode(email);
+
+    if (!mounted) return;
+
+    if (success) {
+      // Navigate to code verification page
+      context.push('/reset-code-verification', extra: email);
+    } else {
+      final error = ref.read(passwordResetProvider).error;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error ?? 'Failed to send reset code')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,16 +109,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF2A1515),
-              Color(0xFF1F0F0F),
-              Color(0xFF0D0505),
-            ],
+            colors: [Color(0xFF2A1515), Color(0xFF1F0F0F), Color(0xFF0D0505)],
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              left: 24.0,
+              right: 24.0,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -149,8 +185,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFFFF3B3B)
-                                          .withOpacity(0.4),
+                                      color: const Color(
+                                        0xFFFF3B3B,
+                                      ).withOpacity(0.4),
                                       blurRadius: 12,
                                       spreadRadius: 2,
                                     ),
@@ -247,63 +284,86 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: _isButtonEnabled
-                                  ? () {
-                                      // Handle send link
-                                    }
-                                  : null,
+                              onTap: _isButtonEnabled ? _handleSendLink : null,
                               borderRadius: BorderRadius.circular(16),
-                              child: Container(
-                                width: double.infinity,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                decoration: BoxDecoration(
-                                  gradient: _isButtonEnabled
-                                      ? const LinearGradient(
-                                          colors: [
-                                            Color(0xFFFF3B3B),
-                                            Color(0xFFCC1F1F),
-                                          ],
-                                        )
-                                      : null,
-                                  color: _isButtonEnabled
-                                      ? null
-                                      : Colors.white.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow: _isButtonEnabled
-                                      ? [
-                                          BoxShadow(
-                                            color: const Color(0xFFFF3B3B)
-                                                .withOpacity(0.3),
-                                            blurRadius: 20,
-                                            offset: const Offset(0, 10),
-                                          ),
-                                        ]
-                                      : null,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Send Link',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: _isButtonEnabled
-                                            ? Colors.white
-                                            : Colors.white.withOpacity(0.3),
-                                      ),
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final isLoading = ref
+                                      .watch(passwordResetProvider)
+                                      .isLoading;
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 20,
                                     ),
-                                    const SizedBox(width: 8),
-                                    Icon(
-                                      Icons.arrow_forward,
+                                    decoration: BoxDecoration(
+                                      gradient: _isButtonEnabled
+                                          ? const LinearGradient(
+                                              colors: [
+                                                Color(0xFFFF3B3B),
+                                                Color(0xFFCC1F1F),
+                                              ],
+                                            )
+                                          : null,
                                       color: _isButtonEnabled
-                                          ? Colors.white
-                                          : Colors.white.withOpacity(0.3),
-                                      size: 20,
+                                          ? null
+                                          : Colors.white.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: _isButtonEnabled
+                                          ? [
+                                              BoxShadow(
+                                                color: const Color(
+                                                  0xFFFF3B3B,
+                                                ).withOpacity(0.3),
+                                                blurRadius: 20,
+                                                offset: const Offset(0, 10),
+                                              ),
+                                            ]
+                                          : null,
                                     ),
-                                  ],
-                                ),
+                                    child: isLoading
+                                        ? const Center(
+                                            child: SizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(Colors.white),
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Send Link',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: _isButtonEnabled
+                                                      ? Colors.white
+                                                      : Colors.white
+                                                            .withOpacity(0.3),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Icon(
+                                                Icons.arrow_forward,
+                                                color: _isButtonEnabled
+                                                    ? Colors.white
+                                                    : Colors.white.withOpacity(
+                                                        0.3,
+                                                      ),
+                                                size: 20,
+                                              ),
+                                            ],
+                                          ),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -312,7 +372,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                     ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 40),
                 // Bottom text
                 FadeTransition(
                   opacity: _fadeAnimation,

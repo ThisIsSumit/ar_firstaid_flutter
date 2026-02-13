@@ -14,6 +14,9 @@ import 'package:ar_firstaid_flutter/screens/user/home_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/identity_verification_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/notification/incoming_emergency_page.dart';
 import 'package:ar_firstaid_flutter/screens/auth/login_page.dart';
+import 'package:ar_firstaid_flutter/screens/auth/forgot_password.dart';
+import 'package:ar_firstaid_flutter/screens/auth/reset_code_verification_page.dart';
+import 'package:ar_firstaid_flutter/screens/auth/reset_password_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/medical_profile_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/messages/messages_inbox.dart';
 import 'package:ar_firstaid_flutter/screens/auth/onboarding_page.dart';
@@ -49,6 +52,9 @@ class AppRoutes {
   static const String onboardingAlt = '/onboarding-alt';
   static const String login = '/login';
   static const String signup = '/signup';
+  static const String forgotPassword = '/forgot-password';
+  static const String resetCodeVerification = '/reset-code-verification';
+  static const String resetPassword = '/reset-password';
 
   // Emergency Flow
   static const String emergencySelector = '/emergency-selector';
@@ -122,7 +128,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             state.matchedLocation == AppRoutes.signup ||
             state.matchedLocation == AppRoutes.onboarding ||
             state.matchedLocation == AppRoutes.onboardingAlt ||
-            state.matchedLocation == AppRoutes.splash;
+            state.matchedLocation == AppRoutes.splash ||
+            state.matchedLocation == AppRoutes.forgotPassword ||
+            state.matchedLocation == AppRoutes.resetCodeVerification ||
+            state.matchedLocation == AppRoutes.resetPassword;
 
         return isAuthRoute ? null : AppRoutes.splash;
       }
@@ -186,6 +195,27 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
     GoRoute(
       path: AppRoutes.signup,
       builder: (context, state) => const SignupPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.forgotPassword,
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.resetCodeVerification,
+      builder: (context, state) {
+        final email = state.extra as String? ?? '';
+        return ResetCodeVerificationPage(email: email);
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.resetPassword,
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>? ?? {};
+        return ResetPasswordPage(
+          email: extras['email'] ?? '',
+          code: extras['code'] ?? '',
+        );
+      },
     ),
 
     // Emergency Flow Routes (Full Screen)
