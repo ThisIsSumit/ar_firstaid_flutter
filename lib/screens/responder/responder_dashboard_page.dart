@@ -1,18 +1,17 @@
-import 'package:ar_firstaid_flutter/core/router/app_router.dart';
+import 'package:ar_firstaid_flutter/core/models/training_progress.dart';
+import 'package:ar_firstaid_flutter/core/providers/training_provider.dart';
+import 'package:ar_firstaid_flutter/screens/responder/training_dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../core/providers/user_provider.dart';
 
 class ResponderDashboardPage extends ConsumerWidget {
   const ResponderDashboardPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
-    final isOnDuty = user?.isOnDuty ?? false;
+    final trainingProgress = ref.watch(trainingProgressProvider);
+
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
       body: SafeArea(
@@ -22,9 +21,17 @@ class ResponderDashboardPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              _buildHeader(user, context),
+              _buildHeader(context),
               const SizedBox(height: 25),
-              _buildDutyStatusCard(ref, isOnDuty),
+              _buildDutyStatusCard(ref),
+              const SizedBox(height: 20),
+
+              // Training Progress Card - NEW
+              _buildTrainingProgressCard(context, trainingProgress)
+                  .animate()
+                  .fadeIn(delay: 200.ms, duration: 500.ms)
+                  .slideY(begin: 0.2, end: 0),
+
               const SizedBox(height: 20),
               _buildStatsGrid(context),
               const SizedBox(height: 20),
@@ -37,7 +44,7 @@ class ResponderDashboardPage extends ConsumerWidget {
               _buildSectionHeader('Recent Responses', 'See All'),
               const SizedBox(height: 15),
               _buildResponsesList(),
-              const SizedBox(height: 100), // Space for bottom nav
+              const SizedBox(height: 100),
             ],
           ),
         ),
@@ -45,11 +52,11 @@ class ResponderDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(User? user, BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       children: [
         InkWell(
-          onTap: () => context.push(AppRoutes.profile),
+          onTap: () {},
           borderRadius: BorderRadius.circular(999),
           child: const CircleAvatar(
             radius: 24,
@@ -57,19 +64,16 @@ class ResponderDashboardPage extends ConsumerWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Column(
+        const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Welcome back,',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.5),
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
             Text(
-              user?.name ?? 'Responder',
-              style: const TextStyle(
+              'Sarah Johnson',
+              style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -78,15 +82,12 @@ class ResponderDashboardPage extends ConsumerWidget {
           ],
         ),
         const Spacer(),
-        _buildCircleIconButton(
-          Icons.notifications_none_rounded,
-          onTap: () => context.push(AppRoutes.responderNotifications),
-        ),
+        _buildCircleIconButton(Icons.notifications_none_rounded, onTap: () {}),
       ],
     );
   }
 
-  Widget _buildDutyStatusCard(WidgetRef ref, bool isOnDuty) {
+  Widget _buildDutyStatusCard(WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -118,9 +119,8 @@ class ResponderDashboardPage extends ConsumerWidget {
               ),
               const Spacer(),
               Switch(
-                value: isOnDuty,
-                onChanged: (_) =>
-                    ref.read(userProvider.notifier).toggleOnDuty(),
+                value: true,
+                onChanged: (_) {},
                 activeColor: const Color(0xFF22C55E),
                 activeTrackColor: const Color(0xFF22C55E).withOpacity(0.2),
               ),
@@ -140,6 +140,125 @@ class ResponderDashboardPage extends ConsumerWidget {
     );
   }
 
+  Widget _buildTrainingProgressCard(
+    BuildContext context,
+    TrainingProgress progress,
+  ) {
+    final percentComplete = (progress.overallProgress * 100).toInt();
+
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const TrainingDashboardPage()),
+      ),
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF3B82F6).withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.school_rounded,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    )
+                    .animate(onPlay: (c) => c.repeat())
+                    .rotate(duration: 3.seconds, begin: 0, end: 1),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Continue Training',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Advanced Responder Course',
+                        style: TextStyle(color: Colors.white70, fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  '$percentComplete%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: LinearProgressIndicator(
+                value: progress.overallProgress,
+                minHeight: 8,
+                backgroundColor: Colors.white.withOpacity(0.2),
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Module ${progress.currentModule} of ${progress.totalModules}',
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+                Row(
+                  children: const [
+                    Text(
+                      'Continue',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildStatsGrid(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
@@ -155,15 +274,12 @@ class ResponderDashboardPage extends ConsumerWidget {
           Icons.medical_services_rounded,
           const Color(0xFFFF3B5C),
         ),
-
         _buildStatCard(
           'Earned',
           '\$150',
           Icons.payments_rounded,
           Colors.orange,
-          onTap: () => context.push(AppRoutes.earnings),
         ),
-
         _buildStatCard('Rating', '4.9', Icons.star_rounded, Colors.amber),
         _buildStatCard('Avg ETA', '2.1m', Icons.timer_rounded, Colors.blue),
       ],
@@ -174,106 +290,93 @@ class ResponderDashboardPage extends ConsumerWidget {
     String label,
     String value,
     IconData icon,
-    Color color, {
-    VoidCallback? onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A24),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: color, size: 18),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+    Color color,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A24),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.5),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
-            const Spacer(),
-            Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildRewardsCard(BuildContext context) {
-    return InkWell(
-      onTap: () => context.push(AppRoutes.rewards),
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A24),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color(0xFF00C853).withOpacity(0.15),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.card_giftcard_rounded,
-                color: Color(0xFF00C853),
-                size: 20,
-              ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A24),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF00C853).withOpacity(0.15),
+              shape: BoxShape.circle,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Rewards & Perks',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+            child: const Icon(
+              Icons.card_giftcard_rounded,
+              color: Color(0xFF00C853),
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Rewards & Perks',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                  Text(
-                    'Redeem points and view perks',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                      fontSize: 12,
-                    ),
+                ),
+                Text(
+                  'Redeem points and view perks',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                    fontSize: 12,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white38,
-              size: 16,
-            ),
-          ],
-        ),
+          ),
+          const Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
+        ],
       ),
     );
   }
@@ -289,7 +392,6 @@ class ResponderDashboardPage extends ConsumerWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Radar pulse effect
           ...List.generate(
             3,
             (index) =>
@@ -312,9 +414,7 @@ class ResponderDashboardPage extends ConsumerWidget {
                     )
                     .fadeOut(),
           ),
-
           const CircleAvatar(radius: 6, backgroundColor: Color(0xFFFF3B5C)),
-
           Positioned(
             left: 20,
             bottom: 20,

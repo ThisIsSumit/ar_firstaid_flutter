@@ -41,6 +41,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     Map<String, dynamic> responder,
   ) {
     showModalBottomSheet(
+      
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
