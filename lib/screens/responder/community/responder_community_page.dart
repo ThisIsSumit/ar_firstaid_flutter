@@ -1396,171 +1396,224 @@ class _ResponderProfileSheetState extends ConsumerState<ResponderProfileSheet> {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 8),
 
-          // Profile header
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: widget.responder['color'] as Color,
-                    width: 3,
-                  ),
-                ),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(
-                    widget.responder['img'] as String,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: widget.responder['color'] as Color,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: const Color(0xFF121217),
-                      width: 3,
+          // Profile header with animation
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOutBack,
+            builder: (context, scale, child) {
+              return Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Transform.scale(
+                    scale: 0.7 + (scale * 0.3),
+                    child: Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: widget.responder['color'] as Color,
+                          width: 2,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(
+                          widget.responder['img'] as String,
+                        ),
+                      ),
                     ),
                   ),
-                  child: const Icon(
-                    Icons.emoji_events,
-                    size: 16,
-                    color: Colors.black,
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Transform.scale(
+                      scale: scale,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: widget.responder['color'] as Color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFF121217),
+                            width: 2,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.emoji_events,
+                          size: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            widget.responder['name'] as String,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-            ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 8),
+          Text(
+                widget.responder['name'] as String,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 400.ms, delay: 100.ms)
+              .slideY(begin: 0.2, end: 0, duration: 400.ms, delay: 100.ms),
+          const SizedBox(height: 4),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFF2D55).withOpacity(0.15),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              'Rank #${widget.responder['rank']}',
-              style: const TextStyle(
-                color: Color(0xFFFF2D55),
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 3,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF2D55).withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Rank #${widget.responder['rank']}',
+                  style: const TextStyle(
+                    color: Color(0xFFFF2D55),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 400.ms, delay: 200.ms)
+              .scale(
+                begin: const Offset(0.8, 0.8),
+                duration: 400.ms,
+                delay: 200.ms,
+              ),
+          const SizedBox(height: 12),
+
+          // Stats - Compact
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Transform.scale(
+              scale: 0.80,
+              child: Row(
+                children: [
+                  Expanded(
+                    child:
+                        _buildStatCard(
+                              'Lives Saved',
+                              '${widget.responder['saves']}',
+                              Icons.favorite,
+                              const Color(0xFFFF2D55),
+                            )
+                            .animate()
+                            .fadeIn(duration: 400.ms, delay: 300.ms)
+                            .slideX(
+                              begin: -0.2,
+                              end: 0,
+                              duration: 400.ms,
+                              delay: 300.ms,
+                            ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child:
+                        _buildStatCard(
+                              'Avg Response',
+                              widget.responder['responseTime'] as String,
+                              Icons.timer,
+                              const Color(0xFF3B82F6),
+                            )
+                            .animate()
+                            .fadeIn(duration: 400.ms, delay: 350.ms)
+                            .slideX(
+                              begin: 0.2,
+                              end: 0,
+                              duration: 400.ms,
+                              delay: 350.ms,
+                            ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 12),
 
-          // Stats
+          // Actions - Compact
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildStatCard(
-                    'Lives Saved',
-                    '${widget.responder['saves']}',
-                    Icons.favorite,
-                    const Color(0xFFFF2D55),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildStatCard(
-                    'Avg Response',
-                    widget.responder['responseTime'] as String,
-                    Icons.timer,
-                    const Color(0xFF3B82F6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Actions
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _toggleFollow,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isFollowing
-                          ? Colors.white.withOpacity(0.1)
-                          : const Color(0xFF00C853),
-                      foregroundColor: _isFollowing
-                          ? Colors.white70
-                          : Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: _isFollowing
-                            ? BorderSide(
-                                color: Colors.white.withOpacity(0.3),
-                                width: 1,
-                              )
-                            : BorderSide.none,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: _toggleFollow,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _isFollowing
+                              ? Colors.white.withOpacity(0.1)
+                              : const Color(0xFF00C853),
+                          foregroundColor: _isFollowing
+                              ? Colors.white70
+                              : Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            side: _isFollowing
+                                ? BorderSide(
+                                    color: Colors.white.withOpacity(0.3),
+                                    width: 1,
+                                  )
+                                : BorderSide.none,
+                          ),
+                        ),
+                        icon: Icon(
+                          _isFollowing
+                              ? Icons.check
+                              : Icons.person_add_outlined,
+                          size: 16,
+                        ),
+                        label: Text(
+                          _isFollowing ? 'Following' : 'Follow',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
-                    icon: Icon(
-                      _isFollowing ? Icons.check : Icons.person_add_outlined,
-                      size: 18,
-                    ),
-                    label: Text(
-                      _isFollowing ? 'Following' : 'Follow',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => _startChat(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(
+                          Icons.chat_bubble_outline,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                GestureDetector(
-                  onTap: () => _startChat(context),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.chat_bubble_outline,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
+              )
+              .animate()
+              .fadeIn(duration: 400.ms, delay: 400.ms)
+              .slideY(begin: 0.2, end: 0, duration: 400.ms, delay: 400.ms),
+          const SizedBox(height: 12),
 
           // Recent activity
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.03),
                 borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(24),
+                  top: Radius.circular(20),
                 ),
               ),
               child: Column(
@@ -1570,12 +1623,12 @@ class _ResponderProfileSheetState extends ConsumerState<ResponderProfileSheet> {
                     'RECENT ACTIVITY',
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.w900,
-                      letterSpacing: 1,
+                      letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Expanded(
                     child: ListView(
                       children: [
