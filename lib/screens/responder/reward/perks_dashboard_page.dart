@@ -1,4 +1,6 @@
+import 'package:ar_firstaid_flutter/core/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -18,7 +20,7 @@ class PerksDashboardPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 60),
-                _buildHeader(),
+                _buildHeader(context),
                 const SizedBox(height: 24),
                 _buildStandingCard(),
                 const SizedBox(height: 40),
@@ -35,13 +37,12 @@ class PerksDashboardPage extends StatelessWidget {
               ],
             ),
           ),
-          _buildBottomNav(),
         ],
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -58,43 +59,34 @@ class PerksDashboardPage extends StatelessWidget {
               ),
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2),
             Text(
-              "Welcome, Miller",
-              style: GoogleFonts.playfairDisplay(
-                color: Colors.white,
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-              ),
-            ).animate().fadeIn(delay: 100.ms, duration: 400.ms).slideY(begin: 0.2),
+                  "Welcome, Miller",
+                  style: GoogleFonts.playfairDisplay(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )
+                .animate()
+                .fadeIn(delay: 100.ms, duration: 400.ms)
+                .slideY(begin: 0.2),
           ],
         ),
-        Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white12),
-              ),
-              child: const CircleAvatar(
-                radius: 24,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=miller'),
+        InkWell(
+          onTap: () => context.push(AppRoutes.profile),
+          child: Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white12),
+            ),
+            child: const CircleAvatar(
+              radius: 24,
+              backgroundImage: NetworkImage(
+                'https://i.pravatar.cc/150?u=miller',
               ),
             ),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF3B5C),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF0A0A0B), width: 2),
-                ),
-              ),
-            ),
-          ],
+          ),
         ).animate().scale(delay: 200.ms),
       ],
     );
@@ -160,7 +152,11 @@ class PerksDashboardPage extends StatelessWidget {
                 children: [
                   Text(
                     "LEVEL PROGRESSION",
-                    style: GoogleFonts.inter(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.inter(
+                      color: Colors.white24,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   RichText(
@@ -168,11 +164,18 @@ class PerksDashboardPage extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: "Silver Tier ",
-                          style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                         TextSpan(
                           text: "Rank 4",
-                          style: GoogleFonts.inter(color: Colors.white38, fontSize: 14),
+                          style: GoogleFonts.inter(
+                            color: Colors.white38,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -196,7 +199,9 @@ class PerksDashboardPage extends StatelessWidget {
               value: 0.7,
               minHeight: 6,
               backgroundColor: Colors.white.withOpacity(0.05),
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF3B5C)),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color(0xFFFF3B5C),
+              ),
             ),
           ),
         ],
@@ -257,7 +262,13 @@ class PerksDashboardPage extends StatelessWidget {
     ).animate().fadeIn(delay: 400.ms);
   }
 
-  Widget _buildRitualCard(String title, String desc, String lp, IconData icon, Color color) {
+  Widget _buildRitualCard(
+    String title,
+    String desc,
+    String lp,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       width: 220,
       padding: const EdgeInsets.all(20),
@@ -280,13 +291,21 @@ class PerksDashboardPage extends StatelessWidget {
           const Spacer(),
           Text(
             title,
-            style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             desc,
             maxLines: 2,
-            style: GoogleFonts.inter(color: Colors.white38, fontSize: 12, height: 1.4),
+            style: GoogleFonts.inter(
+              color: Colors.white38,
+              fontSize: 12,
+              height: 1.4,
+            ),
           ),
           const Spacer(),
           Row(
@@ -294,7 +313,11 @@ class PerksDashboardPage extends StatelessWidget {
             children: [
               Text(
                 "+$lp",
-                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14),
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 14,
+                ),
               ),
               Container(
                 padding: const EdgeInsets.all(6),
@@ -302,7 +325,11 @@ class PerksDashboardPage extends StatelessWidget {
                   color: Colors.white.withOpacity(0.05),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.arrow_forward_rounded, color: Colors.white54, size: 16),
+                child: const Icon(
+                  Icons.arrow_forward_rounded,
+                  color: Colors.white54,
+                  size: 16,
+                ),
               ),
             ],
           ),
@@ -337,14 +364,21 @@ class PerksDashboardPage extends StatelessWidget {
                   left: 20,
                   bottom: 20,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFF3B5C).withOpacity(0.9),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       "ELITE PRIVILEGE",
-                      style: GoogleFonts.inter(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900),
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                 ),
@@ -361,18 +395,30 @@ class PerksDashboardPage extends StatelessWidget {
                   children: [
                     Text(
                       "Premium Coverage",
-                      style: GoogleFonts.inter(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       "Free",
-                      style: GoogleFonts.playfairDisplay(color: Colors.white38, fontStyle: FontStyle.italic, fontSize: 18),
+                      style: GoogleFonts.playfairDisplay(
+                        color: Colors.white38,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 18,
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Text(
                   "Specialized health insurance tiers for active first responders.",
-                  style: GoogleFonts.inter(color: Colors.white38, fontSize: 14, height: 1.5),
+                  style: GoogleFonts.inter(
+                    color: Colors.white38,
+                    fontSize: 14,
+                    height: 1.5,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
@@ -381,12 +427,17 @@ class PerksDashboardPage extends StatelessWidget {
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,
                     minimumSize: const Size(double.infinity, 56),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     elevation: 0,
                   ),
                   child: Text(
                     "Claim Benefit",
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w900, fontSize: 16),
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],
@@ -422,7 +473,13 @@ class PerksDashboardPage extends StatelessWidget {
     ).animate().fadeIn(delay: 600.ms);
   }
 
-  Widget _buildSmallPerkCard(String title, String sub, String lp, IconData? icon, {bool isAdd = false}) {
+  Widget _buildSmallPerkCard(
+    String title,
+    String sub,
+    String lp,
+    IconData? icon, {
+    bool isAdd = false,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -436,85 +493,53 @@ class PerksDashboardPage extends StatelessWidget {
           if (icon != null)
             Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.05),
+                shape: BoxShape.circle,
+              ),
               child: Icon(icon, color: Colors.white38, size: 18),
             ),
           const SizedBox(height: 12),
-          Text(title, style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-          Text(sub, style: GoogleFonts.inter(color: Colors.white38, fontSize: 11)),
+          Text(
+            title,
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            sub,
+            style: GoogleFonts.inter(color: Colors.white38, fontSize: 11),
+          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(lp, style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
+              Text(
+                lp,
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 12,
+                ),
+              ),
               if (isAdd)
-                const Icon(Icons.add_circle_outline, color: Colors.white38, size: 20)
+                const Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.white38,
+                  size: 20,
+                )
               else
-                const Icon(Icons.card_giftcard, color: Color(0xFFFF3B5C), size: 18),
+                const Icon(
+                  Icons.card_giftcard,
+                  color: Color(0xFFFF3B5C),
+                  size: 18,
+                ),
             ],
           ),
         ],
       ),
     );
-  }
-
-  Widget _buildBottomNav() {
-    return Positioned(
-      bottom: 30,
-      left: 20,
-      right: 20,
-      child: Container(
-        height: 80,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1F).withOpacity(0.9),
-          borderRadius: BorderRadius.circular(40),
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 40, offset: const Offset(0, 20))],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _navIcon(Icons.grid_view_rounded, false),
-            _navIcon(Icons.shield_outlined, true, hasDot: true),
-            _emergencyButton(),
-            _navIcon(Icons.analytics_outlined, false),
-            _navIcon(Icons.settings_outlined, false),
-          ],
-        ),
-      ),
-    ).animate().slideY(begin: 1, duration: 600.ms, curve: Curves.easeOutQuart);
-  }
-
-  Widget _navIcon(IconData icon, bool active, {bool hasDot = false}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: active ? const Color(0xFFFF3B5C) : Colors.white24, size: 26),
-        if (hasDot) ...[
-          const SizedBox(height: 4),
-          Container(width: 4, height: 4, decoration: const BoxDecoration(color: Color(0xFFFF3B5C), shape: BoxShape.circle)),
-        ]
-      ],
-    );
-  }
-
-  Widget _emergencyButton() {
-    return Container(
-      width: 56,
-      height: 56,
-      decoration: BoxDecoration(
-        color: const Color(0xFFFF3B5C),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFFF3B5C).withOpacity(0.4),
-            blurRadius: 20,
-            spreadRadius: 2,
-          )
-        ],
-      ),
-      child: const Icon(Icons.emergency, color: Colors.white, size: 28),
-    ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 1.seconds);
   }
 }

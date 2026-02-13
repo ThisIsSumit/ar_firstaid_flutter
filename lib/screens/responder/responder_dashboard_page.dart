@@ -1,5 +1,4 @@
 import 'package:ar_firstaid_flutter/core/router/app_router.dart';
-import 'package:ar_firstaid_flutter/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +27,8 @@ class ResponderDashboardPage extends ConsumerWidget {
               _buildDutyStatusCard(ref, isOnDuty),
               const SizedBox(height: 20),
               _buildStatsGrid(context),
+              const SizedBox(height: 20),
+              _buildRewardsCard(context),
               const SizedBox(height: 30),
               _buildSectionHeader('Coverage Area', null),
               const SizedBox(height: 15),
@@ -47,9 +48,13 @@ class ResponderDashboardPage extends ConsumerWidget {
   Widget _buildHeader(User? user, BuildContext context) {
     return Row(
       children: [
-        const CircleAvatar(
-          radius: 24,
-          backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=sarah'),
+        InkWell(
+          onTap: () => context.push(AppRoutes.profile),
+          borderRadius: BorderRadius.circular(999),
+          child: const CircleAvatar(
+            radius: 24,
+            backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=sarah'),
+          ),
         ),
         const SizedBox(width: 12),
         Column(
@@ -156,6 +161,7 @@ class ResponderDashboardPage extends ConsumerWidget {
           '\$150',
           Icons.payments_rounded,
           Colors.orange,
+          onTap: () => context.push(AppRoutes.earnings),
         ),
 
         _buildStatCard('Rating', '4.9', Icons.star_rounded, Colors.amber),
@@ -168,41 +174,106 @@ class ResponderDashboardPage extends ConsumerWidget {
     String label,
     String value,
     IconData icon,
-    Color color,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A24),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 18),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.5),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+    Color color, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A24),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: color, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              ],
             ),
-          ),
-        ],
+            const Spacer(),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRewardsCard(BuildContext context) {
+    return InkWell(
+      onTap: () => context.push(AppRoutes.rewards),
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A24),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withOpacity(0.05)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF00C853).withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.card_giftcard_rounded,
+                color: Color(0xFF00C853),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Rewards & Perks',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Redeem points and view perks',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white38,
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

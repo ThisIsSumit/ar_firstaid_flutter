@@ -22,7 +22,11 @@ class TreatmentLoggingPage extends StatelessWidget {
         ),
         title: const Text(
           'At Scene Treatment',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         actions: [
@@ -54,27 +58,38 @@ class TreatmentLoggingPage extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const CircleAvatar(radius: 4, backgroundColor: primaryRed),
+                            const CircleAvatar(
+                              radius: 4,
+                              backgroundColor: primaryRed,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'ACTIVE INCIDENT',
                               style: TextStyle(
-                                  color: primaryRed.withOpacity(0.8),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1),
+                                color: primaryRed.withOpacity(0.8),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1,
+                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           'John Doe',
-                          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           'Cardiac Arrest Case • Room 402',
-                          style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 14),
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -108,7 +123,7 @@ class TreatmentLoggingPage extends StatelessWidget {
                     color: primaryRed.withOpacity(0.3),
                     blurRadius: 15,
                     offset: const Offset(0, 5),
-                  )
+                  ),
                 ],
               ),
               child: Row(
@@ -119,7 +134,11 @@ class TreatmentLoggingPage extends StatelessWidget {
                       color: Colors.white.withOpacity(0.2),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 24),
+                    child: const Icon(
+                      Icons.warning_amber_rounded,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   const Expanded(
@@ -128,24 +147,40 @@ class TreatmentLoggingPage extends StatelessWidget {
                       children: [
                         Text(
                           'EMS ARRIVAL',
-                          style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                         Text(
                           '4 mins away',
-                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
                       'En Route',
-                      style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -155,7 +190,7 @@ class TreatmentLoggingPage extends StatelessWidget {
             const SizedBox(height: 32),
             _buildSectionLabel('LOG QUICK ACTION'),
             const SizedBox(height: 16),
-            
+
             // Quick Action Grid
             GridView.count(
               shrinkWrap: true,
@@ -165,9 +200,21 @@ class TreatmentLoggingPage extends StatelessWidget {
               crossAxisSpacing: 16,
               childAspectRatio: 1.4,
               children: [
-                _buildActionCard(Icons.timer_outlined, 'CPR Started', primaryRed),
-                _buildActionCard(Icons.medical_services_outlined, 'AED Applied', primaryRed),
-                _buildActionCard(Icons.flash_on_rounded, 'Shock Given', primaryRed),
+                _buildActionCard(
+                  Icons.timer_outlined,
+                  'CPR Started',
+                  primaryRed,
+                ),
+                _buildActionCard(
+                  Icons.medical_services_outlined,
+                  'AED Applied',
+                  primaryRed,
+                ),
+                _buildActionCard(
+                  Icons.flash_on_rounded,
+                  'Shock Given',
+                  primaryRed,
+                ),
                 _buildActionCard(Icons.air_rounded, 'O2 Admin', primaryRed),
               ],
             ),
@@ -177,18 +224,48 @@ class TreatmentLoggingPage extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Checklist Items
-            _buildChecklistItem('Assess scene safety', '12:41', statusGreen, true, false),
+            _buildChecklistItem(
+              'Assess scene safety',
+              '12:41',
+              statusGreen,
+              true,
+              false,
+            ),
             const SizedBox(height: 12),
-            _buildChecklistItem('Check pulse & breathing', 'Recommended next step', primaryRed, false, true),
+            _buildChecklistItem(
+              'Check pulse & breathing',
+              'Recommended next step',
+              primaryRed,
+              false,
+              true,
+            ),
             const SizedBox(height: 12),
-            _buildChecklistItem('Clear airway (Head tilt-chin lift)', null, Colors.white12, false, false),
+            _buildChecklistItem(
+              'Clear airway (Head tilt-chin lift)',
+              null,
+              Colors.white12,
+              false,
+              false,
+            ),
             const SizedBox(height: 12),
-            _buildChecklistItem('Begin 30:2 compressions', null, Colors.white12, false, false),
+            _buildChecklistItem(
+              'Begin 30:2 compressions',
+              null,
+              Colors.white12,
+              false,
+              false,
+            ),
             const SizedBox(height: 12),
-            _buildChecklistItem('Verify AED status', null, Colors.white12, false, false),
+            _buildChecklistItem(
+              'Verify AED status',
+              null,
+              Colors.white12,
+              false,
+              false,
+            ),
 
             const SizedBox(height: 40),
-            
+
             // Complete Button
             SizedBox(
               width: double.infinity,
@@ -203,11 +280,18 @@ class TreatmentLoggingPage extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.assignment_turned_in_rounded, color: Colors.white),
+                    Icon(
+                      Icons.assignment_turned_in_rounded,
+                      color: Colors.white,
+                    ),
                     SizedBox(width: 12),
                     Text(
                       'Complete Response',
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ],
                 ),
@@ -246,20 +330,34 @@ class TreatmentLoggingPage extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildChecklistItem(String title, String? subtitle, Color color, bool isDone, bool isActive) {
+  Widget _buildChecklistItem(
+    String title,
+    String? subtitle,
+    Color color,
+    bool isDone,
+    bool isActive,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: const Color(0xFF1E1616),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isActive ? color.withOpacity(0.5) : Colors.white.withOpacity(0.05)),
+        border: Border.all(
+          color: isActive
+              ? color.withOpacity(0.5)
+              : Colors.white.withOpacity(0.05),
+        ),
       ),
       child: Row(
         children: [
@@ -267,7 +365,10 @@ class TreatmentLoggingPage extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: isActive ? color : Colors.white24, width: 2),
+              border: Border.all(
+                color: isActive ? color : Colors.white24,
+                width: 2,
+              ),
               color: isDone ? color : Colors.transparent,
             ),
             child: Icon(
@@ -284,7 +385,9 @@ class TreatmentLoggingPage extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: isDone || isActive ? Colors.white : Colors.white.withOpacity(0.3),
+                    color: isDone || isActive
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.3),
                     fontSize: 15,
                     fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
                   ),
@@ -296,7 +399,9 @@ class TreatmentLoggingPage extends StatelessWidget {
                     style: TextStyle(
                       color: isActive ? color : Colors.white.withOpacity(0.2),
                       fontSize: 11,
-                      fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isActive
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
                 ],
@@ -308,7 +413,10 @@ class TreatmentLoggingPage extends StatelessWidget {
           if (isDone && subtitle != null)
             Text(
               subtitle,
-              style: TextStyle(color: Colors.white.withOpacity(0.2), fontSize: 11),
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.2),
+                fontSize: 11,
+              ),
             ),
         ],
       ),

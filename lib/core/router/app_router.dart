@@ -1,10 +1,10 @@
+import 'package:ar_firstaid_flutter/screens/responder/earnings/ways_to_earn.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/active_emergency_status_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/map_location/aed_locator_screen.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/application_success_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/become_responder_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/certification_upload_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/messages/chat_page.dart';
-import 'package:ar_firstaid_flutter/screens/responder/reward/earnings_screen.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_card_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/emergency_confirmation_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/emergency_tracking_page.dart';
@@ -26,6 +26,7 @@ import 'package:ar_firstaid_flutter/screens/responder/profile_screen.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/rate_emergency_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/community/responder_community_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder_dashboard_page.dart';
+import 'package:ar_firstaid_flutter/screens/responder/reward/perks_dashboard_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/responder_en_route_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/notification/responder_notifications_page.dart';
 import 'package:ar_firstaid_flutter/screens/settings_screen.dart';
@@ -79,6 +80,7 @@ class AppRoutes {
   static const String userProfile = '/user-profile';
   static const String aedLocatorStandalone = '/aed-standalone';
   static const String earnings = '/earnings';
+  static const String rewards = '/rewards';
   static const String responderCommunity = '/community';
 
   static const String responderIdentity = '/responder-identity';
@@ -306,9 +308,9 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
       builder: (context, state) => const MedicalProfilePage(),
     ),
     GoRoute(
-      path: AppRoutes.earnings,
+      path: AppRoutes.profile,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const EarningsScreen(),
+      builder: (context, state) => const ProfileScreen(),
     ),
 
     // Main Shell Routes (User Role)
@@ -395,12 +397,6 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                     path: 'history',
                     builder: (context, state) => const TreatmentLoggingPage(),
                   ),
-                  GoRoute(
-                    path: 'notifications',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) =>
-                        const ResponderNotificationsPage(),
-                  ),
                 ],
               ),
             ],
@@ -410,41 +406,26 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
             routes: [
               GoRoute(
                 path: AppRoutes.responderCommunity,
+
                 builder: (context, state) => const ResponderCommunityPage(),
               ),
             ],
           ),
-          // Messages Branch (Shared)
+          // Rewards Branch
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.messages,
-                builder: (context, state) => const MessagesInbox(),
-                routes: [
-                  GoRoute(
-                    path: ':chatId',
-                    builder: (context, state) {
-                      final name = state.uri.queryParameters['name'] ?? 'Chat';
-                      return ChatPage(peerName: name);
-                    },
-                  ),
-                ],
+                path: AppRoutes.rewards,
+                builder: (context, state) => const PerksDashboardPage(),
               ),
             ],
           ),
-          // Profile Branch (Shared)
+          // Earnings Branch
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.profile,
-                builder: (context, state) => const ProfileScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'settings',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) => const SettingsScreen(),
-                  ),
-                ],
+                path: AppRoutes.earnings,
+                builder: (context, state) => const WaysToEarnScreen(),
               ),
             ],
           ),

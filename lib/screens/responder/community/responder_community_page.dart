@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
 
 class ResponderCommunityPage extends StatefulWidget {
   const ResponderCommunityPage({super.key});
@@ -36,6 +35,53 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     super.dispose();
   }
 
+  // Show responder profile dialog
+  void _showResponderProfile(
+    BuildContext context,
+    Map<String, dynamic> responder,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => ResponderProfileSheet(responder: responder),
+    );
+  }
+
+  // Show all top responders
+  void _showAllTopResponders(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AllTopRespondersPage()),
+    );
+  }
+
+  // Show safety alert details
+  void _showSafetyAlertDetails(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => const SafetyAlertDetailsSheet(),
+    );
+  }
+
+  // Show meetup details
+  void _showMeetupDetails(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MeetupDetailsPage()),
+    );
+  }
+
+  // Show network coordination
+  void _showNetworkCoordination(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NetworkCoordinationPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const Color scaffoldBg = Color(0xFF08080C);
@@ -47,7 +93,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
       backgroundColor: scaffoldBg,
       body: Column(
         children: [
-          // 1. Global Impact Banner with shimmer effect
+          // Global Impact Banner
           _buildImpactBanner()
               .animate(onPlay: (controller) => controller.repeat())
               .shimmer(duration: 3000.ms, color: primaryRed.withOpacity(0.1)),
@@ -59,26 +105,20 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 15),
-                  // 2. Custom App Bar with staggered fade-in
-                  _buildHeader()
-                      .animate()
-                      .fadeIn(duration: 600.ms, curve: Curves.easeOut)
-                      .slideY(
-                        begin: -0.3,
-                        end: 0,
-                        duration: 600.ms,
-                        curve: Curves.easeOutCubic,
-                      ),
+                  const SizedBox(height: 10),
 
-                  const SizedBox(height: 30),
-                  // 3. Top Responders Section
-                  _buildSectionHeader('TOP RESPONDERS', 'View All', primaryRed)
+                  // Top Responders Section
+                  _buildSectionHeader(
+                        'TOP RESPONDERS',
+                        'View All',
+                        primaryRed,
+                        onActionTap: () => _showAllTopResponders(context),
+                      )
                       .animate()
                       .fadeIn(delay: 150.ms, duration: 500.ms)
                       .slideX(begin: -0.2, end: 0),
                   const SizedBox(height: 20),
-                  _buildTopRespondersList()
+                  _buildTopRespondersList(context)
                       .animate()
                       .fadeIn(delay: 250.ms, duration: 600.ms)
                       .scale(
@@ -87,14 +127,21 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                       ),
 
                   const SizedBox(height: 30),
-                  // 4. Toggle Tabs with smooth transition
+
+                  // Toggle Tabs
                   _buildNetworkToggle(primaryRed)
                       .animate()
                       .fadeIn(delay: 350.ms, duration: 500.ms)
                       .scale(begin: const Offset(0.95, 0.95)),
 
-                  const SizedBox(height: 40),
-                  // 5. Local Safety Updates with pulse animation
+                  const SizedBox(height: 24),
+
+                  // Network content based on selection
+                  _buildNetworkContent(context, primaryRed, cardBg),
+
+                  const SizedBox(height: 30),
+
+                  // Local Safety Updates
                   _buildSectionHeader(
                     'LOCAL SAFETY UPDATES',
                     null,
@@ -102,7 +149,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                     icon: Icons.warning_rounded,
                   ).animate().fadeIn(delay: 450.ms).slideX(begin: -0.2, end: 0),
                   const SizedBox(height: 16),
-                  _buildSafetyAlertCard(primaryRed, cardBg)
+                  _buildSafetyAlertCard(context, primaryRed, cardBg)
                       .animate()
                       .fadeIn(delay: 500.ms, duration: 600.ms)
                       .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic)
@@ -113,7 +160,8 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                       ),
 
                   const SizedBox(height: 30),
-                  // 6. Responder Meetups
+
+                  // Responder Meetups
                   _buildSectionHeader(
                     'RESPONDER MEETUPS',
                     null,
@@ -121,7 +169,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                     icon: Icons.calendar_month_rounded,
                   ).animate().fadeIn(delay: 550.ms).slideX(begin: -0.2, end: 0),
                   const SizedBox(height: 16),
-                  _buildMeetupCard(primaryRed, cardBg)
+                  _buildMeetupCard(context, primaryRed, cardBg)
                       .animate()
                       .fadeIn(delay: 600.ms, duration: 600.ms)
                       .scale(
@@ -130,8 +178,13 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                       ),
 
                   const SizedBox(height: 20),
-                  // 7. Network Coordination Card with glow effect
-                  _buildCoordinationCard(const Color(0xFF3B82F6), cardBg)
+
+                  // Network Coordination Card
+                  _buildCoordinationCard(
+                        context,
+                        const Color(0xFF3B82F6),
+                        cardBg,
+                      )
                       .animate()
                       .fadeIn(delay: 650.ms, duration: 600.ms)
                       .slideY(begin: 0.2, end: 0)
@@ -141,9 +194,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                         color: const Color(0xFF3B82F6).withOpacity(0.1),
                       ),
 
-                  const SizedBox(
-                    height: 120,
-                  ), // Padding for bottom nav & floating button
+                  const SizedBox(height: 120),
                 ],
               ),
             ),
@@ -215,95 +266,12 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      children: [
-        Container(
-              height: 40,
-              width: 40,
-              decoration: const BoxDecoration(
-                color: Color(0xFFFF2D55),
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Icon(Icons.lens, color: Colors.white, size: 20),
-              ),
-            )
-            .animate(onPlay: (controller) => controller.repeat())
-            .scale(
-              duration: 2000.ms,
-              begin: const Offset(1.0, 1.0),
-              end: const Offset(1.1, 1.1),
-            )
-            .then()
-            .scale(
-              duration: 2000.ms,
-              begin: const Offset(1.1, 1.1),
-              end: const Offset(1.0, 1.0),
-            ),
-        const SizedBox(width: 12),
-        const Text(
-          'LifeLens Hub',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w900,
-            letterSpacing: -0.5,
-          ),
-        ),
-        const Spacer(),
-        _buildIconBadge(Icons.notifications_rounded, true)
-            .animate(onPlay: (controller) => controller.repeat(reverse: true))
-            .shake(duration: 3000.ms, delay: 2000.ms, hz: 2, rotation: 0.05),
-        const SizedBox(width: 16),
-        const CircleAvatar(
-          radius: 18,
-          backgroundColor: Color(0xFFD9D9D9),
-          backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=me'),
-        ).animate().scale(
-          delay: 200.ms,
-          duration: 500.ms,
-          curve: Curves.elasticOut,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIconBadge(IconData icon, bool hasNotification) {
-    return Stack(
-      children: [
-        Icon(icon, color: Colors.white.withOpacity(0.8), size: 28),
-        if (hasNotification)
-          Positioned(
-            right: 2,
-            top: 2,
-            child:
-                Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF3B82F6),
-                        shape: BoxShape.circle,
-                      ),
-                    )
-                    .animate(onPlay: (controller) => controller.repeat())
-                    .scale(duration: 1000.ms, curve: Curves.easeInOut)
-                    .then()
-                    .scale(
-                      duration: 1000.ms,
-                      curve: Curves.easeInOut,
-                      begin: const Offset(1.3, 1.3),
-                      end: const Offset(1.0, 1.0),
-                    ),
-          ),
-      ],
-    );
-  }
-
   Widget _buildSectionHeader(
     String title,
     String? action,
     Color primary, {
     IconData? icon,
+    VoidCallback? onActionTap,
   }) {
     return Row(
       children: [
@@ -325,7 +293,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
         const Spacer(),
         if (action != null)
           GestureDetector(
-            onTap: () {},
+            onTap: onActionTap,
             child:
                 Text(
                       action,
@@ -346,27 +314,39 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     );
   }
 
-  Widget _buildTopRespondersList() {
+  Widget _buildTopRespondersList(BuildContext context) {
     final responders = [
       {
         'name': 'Sarah J.',
         'img': 'https://i.pravatar.cc/150?u=1',
         'color': Colors.amber,
+        'rank': 1,
+        'saves': 47,
+        'responseTime': '2.3 min',
       },
       {
         'name': 'David K.',
         'img': 'https://i.pravatar.cc/150?u=2',
         'color': Colors.white70,
+        'rank': 2,
+        'saves': 42,
+        'responseTime': '2.8 min',
       },
       {
         'name': 'Elena W.',
         'img': 'https://i.pravatar.cc/150?u=3',
         'color': Colors.orangeAccent,
+        'rank': 3,
+        'saves': 38,
+        'responseTime': '3.1 min',
       },
       {
         'name': 'Marcus R.',
         'img': 'https://i.pravatar.cc/150?u=4',
         'color': Colors.redAccent,
+        'rank': 4,
+        'saves': 35,
+        'responseTime': '3.4 min',
       },
     ];
 
@@ -380,91 +360,77 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
         itemBuilder: (context, index) {
           final r = responders[index];
           return GestureDetector(
-                onTap: () {},
-                child: Column(
+            onTap: () => _showResponderProfile(context, r),
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.bottomRight,
                   children: [
-                    Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: r['color'] as Color,
-                                  width: 2,
-                                ),
-                              ),
-                              child: CircleAvatar(
-                                radius: 28,
-                                backgroundImage: NetworkImage(
-                                  r['img'] as String,
-                                ),
-                              ),
-                            )
-                            .animate()
-                            .fadeIn(
-                              delay: Duration(milliseconds: 100 * index),
-                              duration: 400.ms,
-                            )
-                            .scale(
-                              delay: Duration(milliseconds: 100 * index),
-                              curve: Curves.elasticOut,
+                    Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: r['color'] as Color,
+                              width: 2,
                             ),
-                        Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: r['color'] as Color,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 2,
-                                ),
-                              ),
-                              child: Icon(
-                                index == 3 ? Icons.shield : Icons.emoji_events,
-                                size: 10,
-                                color: Colors.black,
-                              ),
-                            )
-                            .animate(
-                              delay: Duration(milliseconds: 100 * index + 200),
-                            )
-                            .scale(
-                              begin: const Offset(0, 0),
-                              curve: Curves.elasticOut,
-                            )
-                            .then(delay: 1000.ms)
-                            .shimmer(
-                              duration: 1500.ms,
-                              color: Colors.white.withOpacity(0.3),
-                            ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                          r['name'] as String,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                          ),
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage(r['img'] as String),
+                          ),
+                        )
+                        .animate()
+                        .fadeIn(
+                          delay: Duration(milliseconds: 100 * index),
+                          duration: 400.ms,
+                        )
+                        .scale(
+                          delay: Duration(milliseconds: 100 * index),
+                          curve: Curves.elasticOut,
+                        ),
+                    Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: r['color'] as Color,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                          child: Icon(
+                            index == 3 ? Icons.shield : Icons.emoji_events,
+                            size: 10,
+                            color: Colors.black,
                           ),
                         )
                         .animate(
-                          delay: Duration(milliseconds: 100 * index + 150),
+                          delay: Duration(milliseconds: 100 * index + 200),
                         )
-                        .fadeIn(duration: 300.ms)
-                        .slideY(begin: 0.5, end: 0),
+                        .scale(
+                          begin: const Offset(0, 0),
+                          curve: Curves.elasticOut,
+                        )
+                        .then(delay: 1000.ms)
+                        .shimmer(
+                          duration: 1500.ms,
+                          color: Colors.white.withOpacity(0.3),
+                        ),
                   ],
                 ),
-              )
-              .animate(target: 1)
-              .scale(
-                duration: 200.ms,
-                curve: Curves.easeInOut,
-                begin: const Offset(1.0, 1.0),
-                end: const Offset(1.05, 1.05),
-              );
+                const SizedBox(height: 8),
+                Text(
+                      r['name'] as String,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
+                    .animate(delay: Duration(milliseconds: 100 * index + 150))
+                    .fadeIn(duration: 300.ms)
+                    .slideY(begin: 0.5, end: 0),
+              ],
+            ),
+          );
         },
       ),
     );
@@ -481,9 +447,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () {
-                setState(() => _isNearbySelected = true);
-              },
+              onTap: () => setState(() => _isNearbySelected = true),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
@@ -515,9 +479,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () {
-                setState(() => _isNearbySelected = false);
-              },
+              onTap: () => setState(() => _isNearbySelected = false),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
@@ -552,9 +514,290 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     );
   }
 
-  Widget _buildSafetyAlertCard(Color primary, Color bg) {
+  Widget _buildNetworkContent(BuildContext context, Color primary, Color bg) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 400),
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.1),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: _isNearbySelected
+          ? _buildNearbyUsersList(context, bg, primary)
+          : _buildCertifiedNetworkList(context, bg, primary),
+    );
+  }
+
+  Widget _buildNearbyUsersList(BuildContext context, Color bg, Color primary) {
+    final users = [
+      {
+        'name': 'Alex Thompson',
+        'distance': '0.3 km',
+        'status': 'Available',
+        'img': 'https://i.pravatar.cc/150?u=5',
+      },
+      {
+        'name': 'Jessica Lee',
+        'distance': '0.5 km',
+        'status': 'Available',
+        'img': 'https://i.pravatar.cc/150?u=6',
+      },
+      {
+        'name': 'Mike Rodriguez',
+        'distance': '0.8 km',
+        'status': 'On Call',
+        'img': 'https://i.pravatar.cc/150?u=7',
+      },
+    ];
+
+    return Column(
+      key: const ValueKey('nearby'),
+      children: users.map((user) {
+        final isAvailable = user['status'] == 'Available';
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white.withOpacity(0.05)),
+            ),
+            child: Row(
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundImage: NetworkImage(user['img'] as String),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: isAvailable ? Colors.green : Colors.orange,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: bg, width: 2),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user['name'] as String,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 14,
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            user['distance'] as String,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.5),
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  (isAvailable ? Colors.green : Colors.orange)
+                                      .withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              user['status'] as String,
+                              style: TextStyle(
+                                color: isAvailable
+                                    ? Colors.green
+                                    : Colors.orange,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: primary.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.chat_bubble_outline,
+                    color: primary,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.2, end: 0),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildCertifiedNetworkList(
+    BuildContext context,
+    Color bg,
+    Color primary,
+  ) {
+    final certified = [
+      {
+        'name': 'Dr. Sarah Mitchell',
+        'role': 'Paramedic',
+        'verified': true,
+        'img': 'https://i.pravatar.cc/150?u=8',
+      },
+      {
+        'name': 'James Chen',
+        'role': 'EMT Certified',
+        'verified': true,
+        'img': 'https://i.pravatar.cc/150?u=9',
+      },
+      {
+        'name': 'Rachel Adams',
+        'role': 'First Aid Trainer',
+        'verified': true,
+        'img': 'https://i.pravatar.cc/150?u=10',
+      },
+    ];
+
+    return Column(
+      key: const ValueKey('certified'),
+      children: certified.map((person) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white.withOpacity(0.05)),
+            ),
+            child: Row(
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundImage: NetworkImage(person['img'] as String),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF3B82F6),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: bg, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.verified,
+                          size: 12,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        person['name'] as String,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.medical_services,
+                            size: 14,
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            person['role'] as String,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.5),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3B82F6).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Connect',
+                    style: TextStyle(
+                      color: Color(0xFF3B82F6),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.2, end: 0),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildSafetyAlertCard(BuildContext context, Color primary, Color bg) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => _showSafetyAlertDetails(context),
       child:
           Container(
                 decoration: BoxDecoration(
@@ -650,7 +893,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                                 const SizedBox(height: 20),
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.access_time,
                                       color: Colors.white30,
                                       size: 14,
@@ -698,9 +941,9 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     );
   }
 
-  Widget _buildMeetupCard(Color primary, Color bg) {
+  Widget _buildMeetupCard(BuildContext context, Color primary, Color bg) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => _showMeetupDetails(context),
       child:
           Container(
                 width: double.infinity,
@@ -716,11 +959,11 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                       height: 160,
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
                           top: Radius.circular(28),
                         ),
-                        image: const DecorationImage(
+                        image: DecorationImage(
                           image: NetworkImage(
                             'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=400',
                           ),
@@ -904,9 +1147,9 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     );
   }
 
-  Widget _buildCoordinationCard(Color blue, Color bg) {
+  Widget _buildCoordinationCard(BuildContext context, Color blue, Color bg) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => _showNetworkCoordination(context),
       child:
           Container(
                 padding: const EdgeInsets.all(16),
@@ -970,7 +1213,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                         ],
                       ),
                     ),
-                    Icon(
+                    const Icon(
                           Icons.arrow_forward_ios_rounded,
                           color: Colors.white24,
                           size: 16,
@@ -990,6 +1233,1235 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                 begin: const Offset(1.0, 1.0),
                 end: const Offset(1.02, 1.02),
               ),
+    );
+  }
+}
+
+// RESPONDER PROFILE BOTTOM SHEET
+class ResponderProfileSheet extends StatelessWidget {
+  final Map<String, dynamic> responder;
+
+  const ResponderProfileSheet({super.key, required this.responder});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      decoration: const BoxDecoration(
+        color: Color(0xFF121217),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Profile header
+          Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: responder['color'] as Color,
+                    width: 3,
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(responder['img'] as String),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: responder['color'] as Color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xFF121217),
+                      width: 3,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.emoji_events,
+                    size: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            responder['name'] as String,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF2D55).withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              'Rank #${responder['rank']}',
+              style: const TextStyle(
+                color: Color(0xFFFF2D55),
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Stats
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildStatCard(
+                    'Lives Saved',
+                    '${responder['saves']}',
+                    Icons.favorite,
+                    const Color(0xFFFF2D55),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatCard(
+                    'Avg Response',
+                    responder['responseTime'] as String,
+                    Icons.timer,
+                    const Color(0xFF3B82F6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Actions
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF2D55),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text(
+                      'Connect',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.chat_bubble_outline,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Recent activity
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.03),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'RECENT ACTIVITY',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        _buildActivityItem(
+                          'Responded to cardiac emergency',
+                          '2 hours ago',
+                          Icons.favorite,
+                          const Color(0xFFFF2D55),
+                        ),
+                        _buildActivityItem(
+                          'Completed CPR training',
+                          '1 day ago',
+                          Icons.school,
+                          const Color(0xFF3B82F6),
+                        ),
+                        _buildActivityItem(
+                          'Attended community meetup',
+                          '3 days ago',
+                          Icons.people,
+                          Colors.green,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 28),
+          const SizedBox(height: 12),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityItem(
+    String title,
+    String time,
+    IconData icon,
+    Color color,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  time,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ALL TOP RESPONDERS PAGE
+class AllTopRespondersPage extends StatelessWidget {
+  const AllTopRespondersPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final responders = List.generate(
+      20,
+      (index) => {
+        'name': 'Responder ${index + 1}',
+        'img': 'https://i.pravatar.cc/150?u=${index + 10}',
+        'rank': index + 1,
+        'saves': 47 - index,
+        'responseTime': '${2.3 + (index * 0.1)} min',
+      },
+    );
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF08080C),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF08080C),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Top Responders',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(20),
+        itemCount: responders.length,
+        itemBuilder: (context, index) {
+          final responder = responders[index];
+          final medal = index < 3
+              ? (index == 0
+                    ? Colors.amber
+                    : index == 1
+                    ? Colors.white70
+                    : Colors.orangeAccent)
+              : null;
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF121217),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: medal != null
+                      ? medal.withOpacity(0.3)
+                      : Colors.white.withOpacity(0.05),
+                ),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: Text(
+                      '#${responder['rank']}',
+                      style: TextStyle(
+                        color: medal ?? Colors.white.withOpacity(0.5),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundImage: NetworkImage(
+                          responder['img'] as String,
+                        ),
+                      ),
+                      if (medal != null)
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: medal,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: const Color(0xFF121217),
+                                width: 2,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.emoji_events,
+                              size: 10,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          responder['name'] as String,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${responder['saves']} saves • ${responder['responseTime']} avg',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white24,
+                    size: 16,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// SAFETY ALERT DETAILS SHEET
+class SafetyAlertDetailsSheet extends StatelessWidget {
+  const SafetyAlertDetailsSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: const BoxDecoration(
+        color: Color(0xFF121217),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Alert header
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF2D55).withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.warning_rounded,
+                        color: Color(0xFFFF2D55),
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Heavy Flooding Alert',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF2D55).withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'HIGH PRIORITY',
+                              style: TextStyle(
+                                color: Color(0xFFFF2D55),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Time and location
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.access_time,
+                      color: Colors.white54,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '14 minutes ago',
+                      style: TextStyle(color: Colors.white54, fontSize: 14),
+                    ),
+                    const Spacer(),
+                    const Icon(
+                      Icons.location_on,
+                      color: Colors.white54,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Downtown District',
+                      style: TextStyle(color: Colors.white54, fontSize: 14),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Description
+                const Text(
+                  'Alert Description',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Flash flooding has been reported on 5th Avenue and Broadway. Water levels are rising rapidly due to heavy rainfall. Emergency responders are currently on route to the affected area. Please avoid this location and seek alternative routes.',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.6),
+                    fontSize: 15,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Affected areas
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.03),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'AFFECTED AREAS',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        _buildLocationItem(
+                          '5th Avenue & Broadway',
+                          '0.2 km away',
+                        ),
+                        _buildLocationItem('Main Street Plaza', '0.5 km away'),
+                        _buildLocationItem('Central Park South', '0.8 km away'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Action buttons
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: BorderSide(color: Colors.white.withOpacity(0.2)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text(
+                      'Dismiss',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF2D55),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text(
+                      'Navigate Away',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationItem(String name, String distance) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFF2D55).withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.location_on,
+                color: Color(0xFFFF2D55),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    distance,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// MEETUP DETAILS PAGE
+class MeetupDetailsPage extends StatelessWidget {
+  const MeetupDetailsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF08080C),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 250,
+            pinned: true,
+            backgroundColor: const Color(0xFF08080C),
+            leading: IconButton(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.arrow_back_ios_new, size: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800',
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          const Color(0xFF08080C).withOpacity(0.8),
+                          const Color(0xFF08080C),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF2D55).withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'COMMUNITY EVENT',
+                      style: TextStyle(
+                        color: Color(0xFFFF2D55),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'CPR Refresher & Network Mixer',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Event details
+                  _buildDetailRow(
+                    Icons.calendar_month_rounded,
+                    'Saturday, March 15, 2025',
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDetailRow(Icons.access_time, '2:00 PM - 5:00 PM'),
+                  const SizedBox(height: 16),
+                  _buildDetailRow(
+                    Icons.location_on,
+                    'Central Hall, 123 Community Street',
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Description
+                  const Text(
+                    'About This Event',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Join fellow responders for a comprehensive CPR skills refresher course followed by a relaxed networking session. This is a great opportunity to practice your life-saving techniques, meet other community responders, and share experiences.',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.6),
+                      fontSize: 15,
+                      height: 1.6,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Attendees
+                  const Text(
+                    'Confirmed Attendees (15)',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 60,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 15,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(
+                              'https://i.pravatar.cc/150?u=attendee$index',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 120),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: const Color(0xFF08080C),
+          border: Border(top: BorderSide(color: Colors.white.withOpacity(0.1))),
+        ),
+        child: SafeArea(
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF2D55),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: const Text(
+              'Register for Event',
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: const Color(0xFFFF2D55), size: 20),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// NETWORK COORDINATION PAGE
+class NetworkCoordinationPage extends StatelessWidget {
+  const NetworkCoordinationPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = [
+      {
+        'name': 'Downtown Response Team',
+        'members': 12,
+        'status': 'Active',
+        'distance': '0.5 km',
+      },
+      {
+        'name': 'North District EMTs',
+        'members': 8,
+        'status': 'Active',
+        'distance': '1.2 km',
+      },
+      {
+        'name': 'Central Medical Unit',
+        'members': 15,
+        'status': 'Standby',
+        'distance': '2.1 km',
+      },
+      {
+        'name': 'Westside First Responders',
+        'members': 10,
+        'status': 'Active',
+        'distance': '2.8 km',
+      },
+    ];
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF08080C),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF08080C),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Network Coordination',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          // Summary card
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                children: [
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '4',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          Text(
+                            'Active Groups',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '45',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          Text(
+                            'Total Responders',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.radio_button_checked,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'All systems operational',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Groups list
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              itemCount: groups.length,
+              itemBuilder: (context, index) {
+                final group = groups[index];
+                final isActive = group['status'] == 'Active';
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF121217),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: isActive
+                            ? const Color(0xFF3B82F6).withOpacity(0.3)
+                            : Colors.white.withOpacity(0.05),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: const Color(
+                                  0xFF3B82F6,
+                                ).withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                Icons.groups,
+                                color: Color(0xFF3B82F6),
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    group['name'] as String,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${group['members']} members • ${group['distance']}',
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    (isActive
+                                            ? const Color(0xFF10B981)
+                                            : Colors.orange)
+                                        .withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                group['status'] as String,
+                                style: TextStyle(
+                                  color: isActive
+                                      ? const Color(0xFF10B981)
+                                      : Colors.orange,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () {},
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  side: BorderSide(
+                                    color: Colors.white.withOpacity(0.2),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text('View Details'),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF3B82F6),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text('Connect'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

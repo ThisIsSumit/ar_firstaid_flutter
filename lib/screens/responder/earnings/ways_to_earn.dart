@@ -186,10 +186,6 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
           ),
         ),
       ),
-      // Bottom navigation
-      bottomNavigationBar: _buildBottomNav(),
-      floatingActionButton: _buildFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -271,8 +267,10 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                     ],
                   ),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(8),
@@ -327,10 +325,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
       decoration: BoxDecoration(
         color: const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,11 +337,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
               color: Colors.white.withOpacity(0.05),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 24,
-            ),
+            child: Icon(icon, color: color, size: 24),
           ),
           const SizedBox(height: 16),
           Text(
@@ -383,10 +374,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.05),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: color.withOpacity(0.3),
-                width: 1,
-              ),
+              border: Border.all(color: color.withOpacity(0.3), width: 1),
             ),
             child: Text(
               buttonText,
@@ -400,75 +388,6 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        border: Border(
-          top: BorderSide(
-            color: Colors.white.withOpacity(0.1),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.apps, 0),
-          _buildNavItem(Icons.star_border, 1),
-          const SizedBox(width: 60), // Space for FAB
-          _buildNavItem(Icons.bar_chart, 2),
-          _buildNavItem(Icons.person_outline, 3),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, int index) {
-    final isSelected = _selectedTab == index;
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedTab = index;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Icon(
-          icon,
-          color: isSelected ? const Color(0xFF00FF85) : Colors.white54,
-          size: 26,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFAB() {
-    return Container(
-      width: 64,
-      height: 64,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF00FF85), Color(0xFF00CC6A)],
-        ),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF00FF85).withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: const Icon(
-        Icons.add,
-        color: Colors.black,
-        size: 32,
       ),
     );
   }
