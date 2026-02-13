@@ -190,6 +190,27 @@ class ResponderShell extends ConsumerWidget {
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
+                child: const Icon(Icons.chat_bubble_outlined, size: 24),
+              ),
+              activeIcon: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF00C853).withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.chat_bubble, size: 24),
+              ),
+              label: 'Messages',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: navigationShell.currentIndex == 3
+                      ? const Color(0xFF00C853).withOpacity(0.15)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: const Icon(Icons.card_giftcard_outlined, size: 24),
               ),
               activeIcon: Container(
@@ -206,7 +227,7 @@ class ResponderShell extends ConsumerWidget {
               icon: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: navigationShell.currentIndex == 3
+                  color: navigationShell.currentIndex == 4
                       ? const Color(0xFF00C853).withOpacity(0.15)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),

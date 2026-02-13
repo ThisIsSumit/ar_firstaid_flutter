@@ -1,4 +1,4 @@
-import 'package:ar_firstaid_flutter/screens/user/messages/chat_page.dart';
+import 'package:ar_firstaid_flutter/screens/messages/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 

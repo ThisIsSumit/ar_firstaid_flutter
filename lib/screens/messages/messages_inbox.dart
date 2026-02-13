@@ -1,54 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/theme/app_theme.dart';
+import '../../core/theme/app_theme.dart';
+import '../../core/providers/chat_provider.dart';
+import '../../core/router/app_router.dart';
+import '../../widgets/new_chat_dialog.dart';
 
-class MessagesInbox extends StatefulWidget {
+class MessagesInbox extends ConsumerStatefulWidget {
   const MessagesInbox({super.key});
 
   @override
-  State<MessagesInbox> createState() => _MessagesInboxState();
+  ConsumerState<MessagesInbox> createState() => _MessagesInboxState();
 }
 
-class _MessagesInboxState extends State<MessagesInbox> {
+class _MessagesInboxState extends ConsumerState<MessagesInbox> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<_ChatPreview> _chats = [
-    _ChatPreview(
-      id: '1',
-      name: 'Emergency Support',
-      lastMessage: 'How can we help you today?',
-      time: '2m ago',
-      unread: 2,
-      isEmergency: true,
-    ),
-    _ChatPreview(
-      id: '2',
-      name: 'Dr. Sarah Miller',
-      lastMessage: 'Your training certificate is ready',
-      time: '1h ago',
-      unread: 0,
-    ),
-    _ChatPreview(
-      id: '3',
-      name: 'Community Group',
-      lastMessage: 'New first aid workshop this weekend!',
-      time: '3h ago',
-      unread: 5,
-    ),
-    _ChatPreview(
-      id: '4',
-      name: 'John (Responder)',
-      lastMessage: 'Thanks for your feedback',
-      time: 'Yesterday',
-      unread: 0,
-    ),
-  ];
-
-  List<_ChatPreview> get _filteredChats {
-    if (_searchQuery.isEmpty) return _chats;
-    return _chats.where((chat) {
+  List<Chat> get _filteredChats {
+    final chats = ref.watch(chatsWithMessagesProvider);
+    if (_searchQuery.isEmpty) return chats;
+    return chats.where((chat) {
       return chat.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           chat.lastMessage.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
@@ -116,8 +89,23 @@ class _MessagesInboxState extends State<MessagesInbox> {
                       return _ChatItem(
                         chat: chat,
                         onTap: () {
+                          // Mark as read
+                          ref.read(chatProvider.notifier).markAsRead(chat.id);
+
+                          // Determine the base route based on current location
+                          final currentPath = GoRouterState.of(
+                            context,
+                          ).uri.path;
+                          final baseRoute =
+                              currentPath.startsWith(
+                                AppRoutes.responderMessages,
+                              )
+                              ? AppRoutes.responderMessages
+                              : AppRoutes.messages;
+
+                          // Navigate to chat
                           context.push(
-                            '/messages/${chat.id}?name=${Uri.encodeComponent(chat.name)}',
+                            '$baseRoute/${chat.id}?name=${Uri.encodeComponent(chat.name)}&avatar=${Uri.encodeComponent(chat.avatar)}',
                           );
                         },
                       );
@@ -130,26 +118,8 @@ class _MessagesInboxState extends State<MessagesInbox> {
   }
 }
 
-class _ChatPreview {
-  final String id;
-  final String name;
-  final String lastMessage;
-  final String time;
-  final int unread;
-  final bool isEmergency;
-
-  _ChatPreview({
-    required this.id,
-    required this.name,
-    required this.lastMessage,
-    required this.time,
-    required this.unread,
-    this.isEmergency = false,
-  });
-}
-
 class _ChatItem extends StatelessWidget {
-  final _ChatPreview chat;
+  final Chat chat;
   final VoidCallback onTap;
 
   const _ChatItem({required this.chat, required this.onTap});
@@ -163,10 +133,17 @@ class _ChatItem extends StatelessWidget {
         backgroundColor: chat.isEmergency
             ? AppColors.primaryRed
             : AppColors.surface,
-        child: Icon(
-          chat.isEmergency ? Icons.emergency : Icons.person,
-          color: chat.isEmergency ? Colors.white : AppColors.textSecondary,
-        ),
+        child: chat.isEmergency
+            ? Icon(Icons.emergency, color: Colors.white)
+            : ClipOval(
+                child: Image(
+                  image: NetworkImage(chat.avatar),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(Icons.person, color: AppColors.primaryRed);
+                  },
+                ),
+              ),
       ),
       title: Row(
         children: [

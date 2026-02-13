@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ResponderCommunityPage extends StatefulWidget {
+import '../../../core/providers/chat_provider.dart';
+import '../../../core/router/app_router.dart';
+
+class ResponderCommunityPage extends ConsumerStatefulWidget {
   const ResponderCommunityPage({super.key});
 
   @override
-  State<ResponderCommunityPage> createState() => _ResponderCommunityPageState();
+  ConsumerState<ResponderCommunityPage> createState() =>
+      _ResponderCommunityPageState();
 }
 
-class _ResponderCommunityPageState extends State<ResponderCommunityPage>
+class _ResponderCommunityPageState extends ConsumerState<ResponderCommunityPage>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _shimmerController;
   bool _isNearbySelected = true;
+  final Set<String> _followingIds = {}; // Track who we're following
 
   @override
   void initState() {
@@ -35,13 +42,36 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
     super.dispose();
   }
 
+  // Start a chat with a person
+  void _startChat(String personId, String personName, {String? avatar}) {
+    // Get or create chat
+    final chat = ref
+        .read(chatProvider.notifier)
+        .getOrCreateChat(personId, personName, avatar: avatar);
+
+    // Navigate to chat
+    context.push(
+      '${AppRoutes.responderMessages}/${chat.id}?name=${Uri.encodeComponent(chat.name)}&avatar=${Uri.encodeComponent(chat.avatar)}',
+    );
+  }
+
+  // Toggle follow status
+  void _toggleFollow(String personId) {
+    setState(() {
+      if (_followingIds.contains(personId)) {
+        _followingIds.remove(personId);
+      } else {
+        _followingIds.add(personId);
+      }
+    });
+  }
+
   // Show responder profile dialog
   void _showResponderProfile(
     BuildContext context,
     Map<String, dynamic> responder,
   ) {
     showModalBottomSheet(
-      
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -318,6 +348,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
   Widget _buildTopRespondersList(BuildContext context) {
     final responders = [
       {
+        'id': 'top_sarah_1',
         'name': 'Sarah J.',
         'img': 'https://i.pravatar.cc/150?u=1',
         'color': Colors.amber,
@@ -326,6 +357,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
         'responseTime': '2.3 min',
       },
       {
+        'id': 'top_david_2',
         'name': 'David K.',
         'img': 'https://i.pravatar.cc/150?u=2',
         'color': Colors.white70,
@@ -334,6 +366,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
         'responseTime': '2.8 min',
       },
       {
+        'id': 'top_elena_3',
         'name': 'Elena W.',
         'img': 'https://i.pravatar.cc/150?u=3',
         'color': Colors.orangeAccent,
@@ -342,6 +375,7 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
         'responseTime': '3.1 min',
       },
       {
+        'id': 'top_marcus_4',
         'name': 'Marcus R.',
         'img': 'https://i.pravatar.cc/150?u=4',
         'color': Colors.redAccent,
@@ -539,18 +573,21 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
   Widget _buildNearbyUsersList(BuildContext context, Color bg, Color primary) {
     final users = [
       {
+        'id': 'user_alex_5',
         'name': 'Alex Thompson',
         'distance': '0.3 km',
         'status': 'Available',
         'img': 'https://i.pravatar.cc/150?u=5',
       },
       {
+        'id': 'user_jessica_6',
         'name': 'Jessica Lee',
         'distance': '0.5 km',
         'status': 'Available',
         'img': 'https://i.pravatar.cc/150?u=6',
       },
       {
+        'id': 'user_mike_7',
         'name': 'Mike Rodriguez',
         'distance': '0.8 km',
         'status': 'On Call',
@@ -651,16 +688,23 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: primary.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
+                GestureDetector(
+                  onTap: () => _startChat(
+                    user['id'] as String,
+                    user['name'] as String,
+                    avatar: user['img'] as String,
                   ),
-                  child: Icon(
-                    Icons.chat_bubble_outline,
-                    color: primary,
-                    size: 20,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: primary.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.chat_bubble_outline,
+                      color: primary,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],
@@ -678,18 +722,21 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
   ) {
     final certified = [
       {
+        'id': 'cert_sarah_8',
         'name': 'Dr. Sarah Mitchell',
         'role': 'Paramedic',
         'verified': true,
         'img': 'https://i.pravatar.cc/150?u=8',
       },
       {
+        'id': 'cert_james_9',
         'name': 'James Chen',
         'role': 'EMT Certified',
         'verified': true,
         'img': 'https://i.pravatar.cc/150?u=9',
       },
       {
+        'id': 'cert_rachel_10',
         'name': 'Rachel Adams',
         'role': 'First Aid Trainer',
         'verified': true,
@@ -770,23 +817,76 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3B82F6).withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Connect',
-                    style: TextStyle(
-                      color: Color(0xFF3B82F6),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => _toggleFollow(person['id'] as String),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _followingIds.contains(person['id'])
+                              ? Colors.white.withOpacity(0.1)
+                              : const Color(0xFF3B82F6),
+                          borderRadius: BorderRadius.circular(12),
+                          border: _followingIds.contains(person['id'])
+                              ? Border.all(
+                                  color: Colors.white.withOpacity(0.3),
+                                  width: 1,
+                                )
+                              : null,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              _followingIds.contains(person['id'])
+                                  ? Icons.check
+                                  : Icons.person_add_outlined,
+                              color: _followingIds.contains(person['id'])
+                                  ? Colors.white70
+                                  : Colors.white,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              _followingIds.contains(person['id'])
+                                  ? 'Following'
+                                  : 'Follow',
+                              style: TextStyle(
+                                color: _followingIds.contains(person['id'])
+                                    ? Colors.white70
+                                    : Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () => _startChat(
+                        person['id'] as String,
+                        person['name'] as String,
+                        avatar: person['img'] as String,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF3B82F6).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.chat_bubble_outline,
+                          color: Color(0xFF3B82F6),
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -1239,10 +1339,43 @@ class _ResponderCommunityPageState extends State<ResponderCommunityPage>
 }
 
 // RESPONDER PROFILE BOTTOM SHEET
-class ResponderProfileSheet extends StatelessWidget {
+class ResponderProfileSheet extends ConsumerStatefulWidget {
   final Map<String, dynamic> responder;
 
   const ResponderProfileSheet({super.key, required this.responder});
+
+  @override
+  ConsumerState<ResponderProfileSheet> createState() =>
+      _ResponderProfileSheetState();
+}
+
+class _ResponderProfileSheetState extends ConsumerState<ResponderProfileSheet> {
+  bool _isFollowing = false;
+
+  void _toggleFollow() {
+    setState(() {
+      _isFollowing = !_isFollowing;
+    });
+  }
+
+  void _startChat(BuildContext context) {
+    // Get or create chat
+    final chat = ref
+        .read(chatProvider.notifier)
+        .getOrCreateChat(
+          widget.responder['id'] as String,
+          widget.responder['name'] as String,
+          avatar: widget.responder['img'] as String,
+        );
+
+    // Close the bottom sheet
+    Navigator.pop(context);
+
+    // Navigate to chat
+    context.push(
+      '${AppRoutes.responderMessages}/${chat.id}?name=${Uri.encodeComponent(chat.name)}&avatar=${Uri.encodeComponent(chat.avatar)}',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1274,13 +1407,15 @@ class ResponderProfileSheet extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: responder['color'] as Color,
+                    color: widget.responder['color'] as Color,
                     width: 3,
                   ),
                 ),
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: NetworkImage(responder['img'] as String),
+                  backgroundImage: NetworkImage(
+                    widget.responder['img'] as String,
+                  ),
                 ),
               ),
               Positioned(
@@ -1289,7 +1424,7 @@ class ResponderProfileSheet extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: responder['color'] as Color,
+                    color: widget.responder['color'] as Color,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: const Color(0xFF121217),
@@ -1307,7 +1442,7 @@ class ResponderProfileSheet extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            responder['name'] as String,
+            widget.responder['name'] as String,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -1322,7 +1457,7 @@ class ResponderProfileSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              'Rank #${responder['rank']}',
+              'Rank #${widget.responder['rank']}',
               style: const TextStyle(
                 color: Color(0xFFFF2D55),
                 fontSize: 14,
@@ -1340,7 +1475,7 @@ class ResponderProfileSheet extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     'Lives Saved',
-                    '${responder['saves']}',
+                    '${widget.responder['saves']}',
                     Icons.favorite,
                     const Color(0xFFFF2D55),
                   ),
@@ -1349,7 +1484,7 @@ class ResponderProfileSheet extends StatelessWidget {
                 Expanded(
                   child: _buildStatCard(
                     'Avg Response',
-                    responder['responseTime'] as String,
+                    widget.responder['responseTime'] as String,
                     Icons.timer,
                     const Color(0xFF3B82F6),
                   ),
@@ -1365,19 +1500,33 @@ class ResponderProfileSheet extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
+                  child: ElevatedButton.icon(
+                    onPressed: _toggleFollow,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF2D55),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: _isFollowing
+                          ? Colors.white.withOpacity(0.1)
+                          : const Color(0xFF00C853),
+                      foregroundColor: _isFollowing
+                          ? Colors.white70
+                          : Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
+                        side: _isFollowing
+                            ? BorderSide(
+                                color: Colors.white.withOpacity(0.3),
+                                width: 1,
+                              )
+                            : BorderSide.none,
                       ),
                     ),
-                    child: const Text(
-                      'Connect',
-                      style: TextStyle(
+                    icon: Icon(
+                      _isFollowing ? Icons.check : Icons.person_add_outlined,
+                      size: 18,
+                    ),
+                    label: Text(
+                      _isFollowing ? 'Following' : 'Follow',
+                      style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
                       ),
@@ -1385,15 +1534,18 @@ class ResponderProfileSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.chat_bubble_outline,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () => _startChat(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.chat_bubble_outline,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ],

@@ -4,7 +4,7 @@ import 'package:ar_firstaid_flutter/screens/user/map_location/aed_locator_screen
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/application_success_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/become_responder_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/certification_upload_page.dart';
-import 'package:ar_firstaid_flutter/screens/user/messages/chat_page.dart';
+import 'package:ar_firstaid_flutter/screens/messages/chat_page.dart';
 import 'package:ar_firstaid_flutter/screens/emergency_card_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/emergency_confirmation_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/emergency_tracking_page.dart';
@@ -18,7 +18,7 @@ import 'package:ar_firstaid_flutter/screens/auth/forgot_password.dart';
 import 'package:ar_firstaid_flutter/screens/auth/reset_code_verification_page.dart';
 import 'package:ar_firstaid_flutter/screens/auth/reset_password_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/medical_profile_page.dart';
-import 'package:ar_firstaid_flutter/screens/user/messages/messages_inbox.dart';
+import 'package:ar_firstaid_flutter/screens/messages/messages_inbox.dart';
 import 'package:ar_firstaid_flutter/screens/auth/onboarding_page.dart';
 import 'package:ar_firstaid_flutter/screens/auth/onboarding_screen.dart'
     hide OnboardingPage;
@@ -95,6 +95,7 @@ class AppRoutes {
 
   // Main Navigation - Responder Role
   static const String responderHome = '/responder-home';
+  static const String responderMessages = '/responder-messages';
 
   // Legacy (kept for compatibility)
   static const String training = '/training';
@@ -348,8 +349,16 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                   GoRoute(
                     path: ':chatId',
                     builder: (context, state) {
+                      final chatId = state.pathParameters['chatId'] ?? '';
                       final name = state.uri.queryParameters['name'] ?? 'Chat';
-                      return ChatPage(peerName: name);
+                      final avatar = state.uri.queryParameters['avatar'] ?? '';
+                      return ChatPage(
+                        chatId: chatId,
+                        peerName: name,
+                        peerAvatar: avatar.isNotEmpty
+                            ? avatar
+                            : 'https://i.pravatar.cc/150?u=$name',
+                      );
                     },
                   ),
                 ],
@@ -397,6 +406,11 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                     path: 'history',
                     builder: (context, state) => const TreatmentLoggingPage(),
                   ),
+                  GoRoute(
+                    path: AppRoutes.responderNotifications,
+                    builder: (context, state) =>
+                        const ResponderNotificationsPage(),
+                  ),
                 ],
               ),
             ],
@@ -408,6 +422,32 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
                 path: AppRoutes.responderCommunity,
 
                 builder: (context, state) => const ResponderCommunityPage(),
+              ),
+            ],
+          ),
+          // Messages Branch (Responder)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.responderMessages,
+                builder: (context, state) => const MessagesInbox(),
+                routes: [
+                  GoRoute(
+                    path: ':chatId',
+                    builder: (context, state) {
+                      final chatId = state.pathParameters['chatId'] ?? '';
+                      final name = state.uri.queryParameters['name'] ?? 'Chat';
+                      final avatar = state.uri.queryParameters['avatar'] ?? '';
+                      return ChatPage(
+                        chatId: chatId,
+                        peerName: name,
+                        peerAvatar: avatar.isNotEmpty
+                            ? avatar
+                            : 'https://i.pravatar.cc/150?u=$name',
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

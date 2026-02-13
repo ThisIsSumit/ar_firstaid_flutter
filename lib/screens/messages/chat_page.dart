@@ -1,38 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/providers/chat_provider.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends ConsumerStatefulWidget {
+  final String chatId;
   final String peerName;
   final String peerAvatar;
 
   const ChatPage({
     super.key,
+    this.chatId = '',
     this.peerName = 'John Smith',
     this.peerAvatar = 'https://i.pravatar.cc/150?u=john',
   });
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  ConsumerState<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends ConsumerState<ChatPage> {
   final TextEditingController _msgController = TextEditingController();
-  final List<Map<String, dynamic>> _messages = [
-    {'text': "I'm 2 minutes away. Please stay calm.", 'isMe': false, 'time': '10:42 AM'},
-    {'text': "I'm by the main entrance. I have my hazard lights on.", 'isMe': true, 'time': '10:43 AM'},
-    {'text': "Understood. I see your location. Don't move the patient.", 'isMe': false, 'time': '10:43 AM'},
-  ];
+
+  List<Message> get _messages {
+    // Get messages from provider
+    if (widget.chatId.isNotEmpty) {
+      return ref.watch(chatMessagesProvider(widget.chatId));
+    }
+    return [];
+  }
 
   void _sendMessage() {
     if (_msgController.text.trim().isEmpty) return;
-    setState(() {
-      _messages.add({
-        'text': _msgController.text,
-        'isMe': true,
-        'time': 'Just now',
-      });
-      _msgController.clear();
-    });
+
+    // Use chat provider to send message
+    if (widget.chatId.isNotEmpty) {
+      ref
+          .read(chatProvider.notifier)
+          .sendMessage(widget.chatId, _msgController.text);
+    }
+
+    _msgController.clear();
   }
 
   @override
@@ -43,7 +51,11 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: const Color(0xFF13131A),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+            size: 20,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
@@ -58,11 +70,19 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Text(
                   widget.peerName,
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const Text(
                   'Responder • Online',
-                  style: TextStyle(color: Color(0xFF10B981), fontSize: 11, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    color: Color(0xFF10B981),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -91,15 +111,19 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildMessageBubble(Map<String, dynamic> msg) {
-    final bool isMe = msg['isMe'];
+  Widget _buildMessageBubble(Message msg) {
+    final bool isMe = msg.isMe;
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Container(
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75,
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isMe ? const Color(0xFFFF3B5C) : const Color(0xFF1A1A24),
@@ -111,14 +135,21 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             child: Text(
-              msg['text'],
-              style: const TextStyle(color: Colors.white, fontSize: 15, height: 1.4),
+              msg.text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                height: 1.4,
+              ),
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            msg['time'],
-            style: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 10),
+            msg.time,
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.3),
+              fontSize: 10,
+            ),
           ),
         ],
       ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.1),
@@ -127,7 +158,12 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildInputSection() {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 12, 20, MediaQuery.of(context).padding.bottom + 12),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        12,
+        20,
+        MediaQuery.of(context).padding.bottom + 12,
+      ),
       decoration: const BoxDecoration(
         color: Color(0xFF13131A),
         border: Border(top: BorderSide(color: Colors.white10)),
@@ -164,7 +200,11 @@ class _ChatPageState extends State<ChatPage> {
                 color: Color(0xFFFF3B5C),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.send_rounded, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.send_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
         ],

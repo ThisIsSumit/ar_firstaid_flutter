@@ -1,9 +1,11 @@
 import 'package:ar_firstaid_flutter/core/models/training_progress.dart';
 import 'package:ar_firstaid_flutter/core/providers/training_provider.dart';
+import 'package:ar_firstaid_flutter/core/router/app_router.dart';
 import 'package:ar_firstaid_flutter/screens/responder/training_dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ResponderDashboardPage extends ConsumerWidget {
   const ResponderDashboardPage({super.key});
@@ -56,7 +58,9 @@ class ResponderDashboardPage extends ConsumerWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () {},
+          onTap: () {
+            context.push(AppRoutes.profile);
+          },
           borderRadius: BorderRadius.circular(999),
           child: const CircleAvatar(
             radius: 24,
@@ -82,7 +86,12 @@ class ResponderDashboardPage extends ConsumerWidget {
           ],
         ),
         const Spacer(),
-        _buildCircleIconButton(Icons.notifications_none_rounded, onTap: () {}),
+        _buildCircleIconButton(
+          Icons.notifications_none_rounded,
+          onTap: () {
+            context.push('${AppRoutes.responderNotifications}');
+          },
+        ),
       ],
     );
   }
