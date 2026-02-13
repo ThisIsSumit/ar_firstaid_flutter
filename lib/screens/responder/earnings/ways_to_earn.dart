@@ -38,7 +38,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0A0B),
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnimation,
@@ -46,7 +46,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
             children: [
               // Header
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -54,8 +54,8 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                       'LIFELENS REWARDS',
                       style: TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF00FF85),
+                        fontWeight: FontWeight.w900,
+                        color: const Color(0xFFFF3B5C),
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -68,7 +68,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                           child: Text(
                             'Ways to\nEarn',
                             style: TextStyle(
-                              fontSize: 48,
+                              fontSize: 42,
                               fontWeight: FontWeight.w300,
                               color: Colors.white,
                               fontStyle: FontStyle.italic,
@@ -82,9 +82,10 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                             Text(
                               'BALANCE',
                               style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.white.withOpacity(0.5),
+                                fontSize: 10,
+                                color: Colors.white.withOpacity(0.6),
                                 letterSpacing: 1,
+                                fontWeight: FontWeight.w900,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -94,7 +95,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                                   '2,450',
                                   style: TextStyle(
                                     fontSize: 32,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w900,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -102,7 +103,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                                 Icon(
                                   Icons.star,
                                   color: Colors.white.withOpacity(0.3),
-                                  size: 20,
+                                  size: 18,
                                 ),
                               ],
                             ),
@@ -113,16 +114,21 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                   ],
                 ),
               ),
+
               // Content
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
                       children: [
                         const SizedBox(height: 8),
                         // Video card
                         _buildVideoCard(),
+                        const SizedBox(height: 24),
+
+                        // Referral Program Section
+                        _buildReferralCard(context),
                         const SizedBox(height: 24),
                         // Action cards
                         Row(
@@ -134,7 +140,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                                 subtitle: 'Active emergency\nassistance.',
                                 points: '+500',
                                 buttonText: 'START',
-                                color: const Color(0xFF00FF85),
+                                color: const Color.fromARGB(255, 223, 223, 223),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -145,7 +151,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                                 subtitle: 'Verify equipment\nstatus.',
                                 points: '+200',
                                 buttonText: 'START',
-                                color: const Color(0xFF00FF85),
+                                color: const Color.fromARGB(255, 223, 223, 223),
                               ),
                             ),
                           ],
@@ -160,7 +166,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                                 subtitle: 'New health\nprotocols.',
                                 points: '+150',
                                 buttonText: 'START',
-                                color: const Color(0xFF00FF85),
+                                color: const Color.fromARGB(255, 223, 223, 223),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -171,14 +177,12 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                                 subtitle: 'Equipment\ninventory check-\nup.',
                                 points: '+100',
                                 buttonText: 'START',
-                                color: const Color(0xFF00FF85),
+                                color: const Color.fromARGB(255, 223, 223, 223),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 48),
-                        // Referral Program Section
-                        _buildReferralCard(context),
+
                         const SizedBox(height: 100),
                       ],
                     ),
@@ -199,40 +203,34 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
         onTap: () {
           context.push('/referral-program');
         },
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF0A0A0A),
-            borderRadius: BorderRadius.circular(20),
+            color: const Color(0xFF15151A),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color(0xFF00FF85).withOpacity(0.3),
-              width: 1.5,
+              color: const Color(0xFF00FF85).withOpacity(0.2),
+              width: 1,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF00FF85).withOpacity(0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
           ),
           child: Row(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF00FF85).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(16),
+                  color: const Color.fromARGB(
+                    255,
+                    223,
+                    223,
+                    223,
+                  ).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
-                  Icons.share_sharp,
-                  color: Color(0xFF00FF85),
-                  size: 28,
-                ),
+                child: const Icon(Icons.share_sharp, size: 24),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,17 +238,17 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                     const Text(
                       'Referral Program',
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 4),
                     Text(
-                      'Invite friends & earn\nrewards together',
+                      'Grow your earnings',
                       style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white.withOpacity(0.4),
+                        fontSize: 12,
+                        color: Colors.white.withOpacity(0.6),
                         height: 1.3,
                       ),
                     ),
@@ -258,18 +256,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                 ),
               ),
               const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF00FF85).withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: Color(0xFF00FF85),
-                  size: 20,
-                ),
-              ),
+              const Icon(Icons.arrow_forward_ios, size: 16),
             ],
           ),
         ),
@@ -339,7 +326,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF00FF85),
+
                           letterSpacing: 1.2,
                         ),
                       ),
@@ -362,10 +349,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: const Color(0xFF00FF85).withOpacity(0.5),
-                        width: 1,
-                      ),
+                      border: Border.all(width: 1),
                     ),
                     child: Row(
                       children: [
@@ -374,7 +358,6 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFF00FF85),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -382,7 +365,7 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
                           'WATCH',
                           style: TextStyle(
                             fontSize: 10,
-                            color: const Color(0xFF00FF85),
+
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0.5,
                             decoration: TextDecoration.underline,
@@ -411,54 +394,54 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0A),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
+        color: const Color(0xFF15151A),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.05), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: color, size: 24),
+            child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(height: 16),
           Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              fontWeight: FontWeight.w900,
               color: Colors.white,
               height: 1.2,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             subtitle,
             style: TextStyle(
-              fontSize: 13,
-              color: Colors.white.withOpacity(0.4),
+              fontSize: 12,
+              color: Colors.white.withOpacity(0.6),
               height: 1.3,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Text(
             points,
             style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
               color: color,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 9),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.05),
               borderRadius: BorderRadius.circular(10),
@@ -467,10 +450,10 @@ class _WaysToEarnScreenState extends State<WaysToEarnScreen>
             child: Text(
               buttonText,
               style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                fontWeight: FontWeight.w900,
                 color: color,
-                letterSpacing: 1,
+                letterSpacing: 0.5,
               ),
               textAlign: TextAlign.center,
             ),

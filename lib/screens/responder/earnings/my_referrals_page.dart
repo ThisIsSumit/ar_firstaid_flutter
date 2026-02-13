@@ -73,34 +73,53 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0A0B),
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF0A0A0B),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: Colors.white, size: 30),
+          icon: const Icon(Icons.chevron_left, color: Colors.white, size: 28),
           onPressed: () => context.pop(),
         ),
         centerTitle: true,
         title: Text(
           'MY REFERRALS',
           style: GoogleFonts.inter(
-            color: Colors.white38,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 2.5,
+            color: Colors.white60,
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 32),
-            // Summary Cards
+            const SizedBox(height: 20),
+            // Header
+            Text(
+              'REFERRALS',
+              style: GoogleFonts.inter(
+                color: Colors.white60,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.5,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Your Network',
+              style: GoogleFonts.playfairDisplay(
+                color: Colors.white,
+                fontSize: 32,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
+            ).animate().fadeIn(duration: 400.ms),
+            const SizedBox(height: 24),
             SizedBox(
-              height: 100,
               child: Row(
                 children: [
                   Expanded(
@@ -176,15 +195,17 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0A),
+        color: const Color(0xFF15151A),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,20 +213,21 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
               Text(
                 title,
                 style: GoogleFonts.inter(
-                  fontSize: 11,
-                  color: Colors.white38,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
+                  color: Colors.white60,
+                  fontWeight: FontWeight.w900,
                   letterSpacing: 0.5,
                 ),
               ),
-              Icon(icon, color: color, size: 18),
+              Icon(icon, color: color, size: 16),
             ],
           ),
+          const SizedBox(height: 12),
           Text(
             value,
             style: GoogleFonts.inter(
-              fontSize: 28,
-              fontWeight: FontWeight.w300,
+              fontSize: 32,
+              fontWeight: FontWeight.w900,
               color: Colors.white,
             ),
           ),
@@ -222,7 +244,7 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
         style: GoogleFonts.inter(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: isSelected ? Colors.black : Colors.white70,
+          color: isSelected ? Colors.white : Colors.white54,
         ),
       ),
       onSelected: (selected) {
@@ -239,6 +261,7 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
   }
 
   Widget _buildReferralTile(ReferralItem referral) {
+    const Color surfaceColor = Color(0xFF15151A);
     Color statusColor = referral.status == 'verified'
         ? const Color(0xFF00FF85)
         : Colors.white38;
@@ -248,7 +271,7 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0A),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
@@ -275,7 +298,7 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,16 +306,18 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
                     Text(
                       referral.name,
                       style: GoogleFonts.inter(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
                     Text(
                       referral.email,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
-                        fontSize: 12,
-                        color: Colors.white38,
+                        fontSize: 11,
+                        color: Colors.white60,
                       ),
                     ),
                   ],
@@ -300,19 +325,19 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                  horizontal: 10,
+                  vertical: 4,
                 ),
                 decoration: BoxDecoration(
                   color: statusColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: statusColor.withOpacity(0.3)),
                 ),
                 child: Text(
                   statusLabel,
                   style: GoogleFonts.inter(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w900,
                     color: statusColor,
                     letterSpacing: 0.5,
                   ),
@@ -329,15 +354,15 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
                   Text(
                     'Joined ${_getDaysAgo(referral.joinedDate)}',
                     style: GoogleFonts.inter(
-                      fontSize: 11,
-                      color: Colors.white24,
+                      fontSize: 10,
+                      color: Colors.white60,
                     ),
                   ),
                   Text(
-                    '+${referral.rewardEarned} credits',
+                    '+${referral.rewardEarned}',
                     style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
                       color: const Color(0xFF00FF85),
                     ),
                   ),
@@ -350,8 +375,8 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
               child: Text(
                 'Invitation sent ${_getDaysAgo(referral.joinedDate)}',
                 style: GoogleFonts.inter(
-                  fontSize: 11,
-                  color: Colors.white24,
+                  fontSize: 10,
+                  color: Colors.white60,
                   fontStyle: FontStyle.italic,
                 ),
               ),

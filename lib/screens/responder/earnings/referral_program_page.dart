@@ -8,59 +8,65 @@ class ReferralProgramPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color surfaceColor = Color(0xFF131313);
-    const Color accentGold = Color(0xFFFFD700);
+    const Color surfaceColor = Color(0xFF15151A);
+    const Color accentRed = Color(0xFFFF3B5C);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0A0A0B),
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF0A0A0B),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: Colors.white, size: 30),
+          icon: const Icon(Icons.chevron_left, color: Colors.white, size: 28),
           onPressed: () => context.pop(),
         ),
         centerTitle: true,
         title: Text(
           'REFERRAL PROGRAM',
           style: GoogleFonts.inter(
-            color: Colors.white38,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 2.5,
+            color: Colors.white60,
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline, color: Colors.white38),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             // Hero Header
             Text(
-              'Help Save\nMore Lives.',
-              style: GoogleFonts.playfairDisplay(
-                color: Colors.white,
-                fontSize: 48,
-                height: 1.1,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w500,
-              ),
-            ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.1),
-
-            const SizedBox(height: 16),
-            Text(
-              'Expand our community of responders. Your influence creates impact where it matters most.',
+              'REFERRALS',
               style: GoogleFonts.inter(
-                color: Colors.white38,
-                fontSize: 15,
+                color: Colors.white60,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.5,
+              ),
+            ).animate().fadeIn(duration: 400.ms),
+            const SizedBox(height: 12),
+            Text(
+                  'Grow Your\nCommunity',
+                  style: GoogleFonts.playfairDisplay(
+                    color: Colors.white,
+                    fontSize: 42,
+                    height: 1.1,
+
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                .animate()
+                .fadeIn(delay: 100.ms, duration: 400.ms)
+                .slideY(begin: 0.1),
+            const SizedBox(height: 12),
+            Text(
+              'Invite responders and earn rewards for your referrals.',
+              style: GoogleFonts.inter(
+                color: Colors.white60,
+                fontSize: 13,
                 height: 1.5,
               ),
             ).animate().fadeIn(delay: 200.ms),
@@ -70,38 +76,38 @@ class ReferralProgramPage extends StatelessWidget {
             // Referral Code Card
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 40),
+              padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
                 color: surfaceColor,
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(color: Colors.white.withOpacity(0.05)),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'YOUR REFERRAL IDENTIFIER',
+                    'YOUR CODE',
                     style: GoogleFonts.inter(
-                      color: Colors.white24,
+                      color: Colors.white60,
                       fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 2,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Text(
                         'RESCUE-24',
                         style: GoogleFonts.inter(
                           color: Colors.white,
-                          fontSize: 42,
-                          fontWeight: FontWeight.w300,
-                          letterSpacing: 8,
+                          fontSize: 48,
+                          fontWeight: FontWeight.w900,
                         ),
                       )
                       .animate(onPlay: (controller) => controller.repeat())
                       .shimmer(duration: 3.seconds, color: Colors.white24),
                 ],
               ),
-            ).animate().scale(delay: 400.ms, curve: Curves.easeOutBack),
+            ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1),
 
             const SizedBox(height: 16),
 
@@ -113,12 +119,15 @@ class ReferralProgramPage extends StatelessWidget {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {},
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(16),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 22),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white10),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.1),
+                          ),
+                          color: Colors.white.withOpacity(0.03),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,15 +135,16 @@ class ReferralProgramPage extends StatelessWidget {
                             const Icon(
                               Icons.share_outlined,
                               color: Colors.white,
-                              size: 20,
+                              size: 18,
                             ),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: 10),
                             Text(
-                              'Share',
+                              'Share Code',
                               style: GoogleFonts.inter(
                                 color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ],
@@ -149,31 +159,25 @@ class ReferralProgramPage extends StatelessWidget {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () => context.push('/my-referrals'),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(16),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 22),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFF00FF85).withOpacity(0.3),
-                          ),
-                          color: const Color(0xFF00FF85).withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(),
+                          color: accentRed.withOpacity(0.1),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.history,
-                              color: Color(0xFF00FF85),
-                              size: 20,
-                            ),
-                            const SizedBox(width: 12),
+                            const Icon(Icons.people_outline, size: 18),
+                            const SizedBox(width: 10),
                             Text(
                               'My Referrals',
                               style: GoogleFonts.inter(
-                                color: const Color(0xFF00FF85),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ],
@@ -183,39 +187,25 @@ class ReferralProgramPage extends StatelessWidget {
                   ),
                 ),
               ],
-            ).animate().fadeIn(delay: 600.ms),
+            ).animate().fadeIn(delay: 400.ms),
 
             const SizedBox(height: 64),
 
             // Engagement Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Engagement',
-                  style: GoogleFonts.playfairDisplay(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                Text(
-                  'VIEW DETAILS',
-                  style: GoogleFonts.inter(
-                    color: const Color(0xFFC5A358),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ],
-            ).animate().fadeIn(delay: 800.ms),
+            Text(
+              'Your Network',
+              style: GoogleFonts.playfairDisplay(
+                color: Colors.white,
+                fontSize: 24,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
+            ).animate().fadeIn(delay: 500.ms),
 
             const SizedBox(height: 32),
 
             // Engagement Grid with Custom Dividers
-            _buildEngagementGrid(accentGold),
+            _buildEngagementGrid(accentRed),
 
             const SizedBox(height: 64),
 
@@ -230,210 +220,139 @@ class ReferralProgramPage extends StatelessWidget {
   }
 
   Widget _buildEngagementGrid(Color accent) {
+    const Color surfaceColor = Color(0xFF15151A);
     return Column(
       children: [
+        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
-              child: _buildStatItem('12', 'TOTAL INVITES', isLeft: true),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'TOTAL INVITES',
+                      style: GoogleFonts.inter(
+                        color: Colors.white60,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '12',
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            Container(height: 60, width: 0.5, color: Colors.white10),
+            const SizedBox(width: 12),
             Expanded(
-              child: _buildUserStat(
-                'Marcus Holloway',
-                'Awaiting response',
-                Icons.hourglass_empty,
-                Colors.white24,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'VERIFIED',
+                      style: GoogleFonts.inter(
+                        color: Colors.white60,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '8',
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24),
-          child: Divider(color: Colors.white.withOpacity(0.05), thickness: 0.5),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: _buildUserStat(
-                'Sarah Jenkins',
-                'VERIFIED',
-                Icons.verified_user,
-                accent,
-                isVerified: true,
-              ),
-            ),
-            Container(height: 60, width: 0.5, color: Colors.white10),
-            Expanded(
-              child: _buildStatItem('08', 'ACTIVE HEROES', isLeft: false),
-            ),
-          ],
-        ),
       ],
-    ).animate().fadeIn(delay: 1.seconds).slideY(begin: 0.05);
-  }
-
-  Widget _buildStatItem(String val, String label, {required bool isLeft}) {
-    return Column(
-      crossAxisAlignment: isLeft
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.end,
-      children: [
-        Text(
-          val,
-          style: GoogleFonts.inter(
-            color: Colors.white,
-            fontSize: 48,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            color: Colors.white24,
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUserStat(
-    String name,
-    String sub,
-    IconData icon,
-    Color iconCol, {
-    bool isVerified = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: iconCol, size: 24),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  sub,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    color: isVerified ? iconCol : Colors.white24,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1);
   }
 
   Widget _buildMilestoneCard(Color surface) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: surface,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.03),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.military_tech,
-                  color: Colors.white,
-                  size: 24,
-                ),
+              const Icon(
+                Icons.military_tech,
+                color: Color(0xFFFF3B5C),
+                size: 18,
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
               Text(
-                'Next Milestone',
+                'NEXT MILESTONE',
                 style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                  color: Colors.white60,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 32),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Elite Recruiter',
-                    style: GoogleFonts.playfairDisplay(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '2 MORE TO UNLOCK',
-                    style: GoogleFonts.inter(
-                      color: Colors.white24,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '2.5k',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  Text(
-                    'CREDITS',
-                    style: GoogleFonts.inter(
-                      color: Colors.white24,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          const SizedBox(height: 16),
+          Text(
+            'Elite Recruiter',
+            style: GoogleFonts.playfairDisplay(
+              color: Colors.white,
+              fontSize: 20,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '2 more referrals to unlock exclusive rewards',
+            style: GoogleFonts.inter(color: Colors.white60, fontSize: 12),
+          ),
+          const SizedBox(height: 16),
+          LinearProgressIndicator(
+            value: 0.6,
+            minHeight: 4,
+            backgroundColor: Colors.white.withOpacity(0.05),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF3B5C)),
           ),
         ],
       ),
-    ).animate().fadeIn(delay: 1.2.seconds).slideY(begin: 0.1);
+    ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1);
   }
 }
