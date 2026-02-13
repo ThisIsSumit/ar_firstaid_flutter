@@ -1,4 +1,6 @@
 import 'package:ar_firstaid_flutter/screens/responder/earnings/ways_to_earn.dart';
+import 'package:ar_firstaid_flutter/screens/responder/earnings/referral_program_page.dart';
+import 'package:ar_firstaid_flutter/screens/responder/earnings/my_referrals_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/active_emergency_status_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/map_location/aed_locator_screen.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder%20form/application_success_page.dart';
@@ -80,6 +82,8 @@ class AppRoutes {
   static const String userProfile = '/user-profile';
   static const String aedLocatorStandalone = '/aed-standalone';
   static const String earnings = '/earnings';
+  static const String referralProgram = '/referral-program';
+  static const String myReferrals = '/my-referrals';
   static const String rewards = '/rewards';
   static const String responderCommunity = '/community';
 
@@ -307,6 +311,16 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
     GoRoute(
       path: AppRoutes.medicalProfile,
       builder: (context, state) => const MedicalProfilePage(),
+    ),
+    GoRoute(
+      path: AppRoutes.referralProgram,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const ReferralProgramPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.myReferrals,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const MyReferralsPage(),
     ),
     GoRoute(
       path: AppRoutes.profile,
