@@ -124,9 +124,7 @@ class ReferralProgramPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.1),
-                          ),
+                          border: Border.all(color: Colors.white),
                           color: Colors.white.withOpacity(0.03),
                         ),
                         child: Row(
@@ -164,8 +162,9 @@ class ReferralProgramPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(),
-                          color: accentRed.withOpacity(0.1),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

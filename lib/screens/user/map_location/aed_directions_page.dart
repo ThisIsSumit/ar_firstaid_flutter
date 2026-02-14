@@ -649,7 +649,6 @@ class _AEDDirectionsPageState extends State<AEDDirectionsPage> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
             },
             child: const Text('Got it'),
           ),

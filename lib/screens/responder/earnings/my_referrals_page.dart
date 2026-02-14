@@ -111,7 +111,7 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
             const SizedBox(height: 8),
             Text(
               'Your Network',
-              style: GoogleFonts.playfairDisplay(
+              style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 32,
                 fontStyle: FontStyle.italic,
@@ -145,15 +145,11 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
             const SizedBox(height: 40),
             // Filter Tabs
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
                   'Referrals',
-                  style: GoogleFonts.playfairDisplay(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontStyle: FontStyle.italic,
-                  ),
+                  style: GoogleFonts.inter(color: Colors.white, fontSize: 20),
                 ),
                 SizedBox(
                   height: 36,
@@ -242,7 +238,6 @@ class _MyReferralsPageState extends State<MyReferralsPage> {
       label: Text(
         label,
         style: GoogleFonts.inter(
-          fontSize: 12,
           fontWeight: FontWeight.w600,
           color: isSelected ? Colors.white : Colors.white54,
         ),

@@ -105,7 +105,7 @@ class AppRoutes {
 
   // Main Navigation - Responder Role
   static const String responderHome = '/responder-home';
-  static const String responderMessages = '/responder-messages';
+  static const String responderMessages = '/chat';
 
   // Legacy (kept for compatibility)
   static const String training = '/training';

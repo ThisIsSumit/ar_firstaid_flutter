@@ -95,7 +95,7 @@ class MedicalProfilePage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () => context.pop(),
+            onPressed: () => context.go(AppRoutes.home),
             icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           ),
           const Text(
@@ -347,17 +347,21 @@ class MedicalProfilePage extends ConsumerWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF00FF85).withOpacity(0.1),
+                  color: const Color(0xFFFF3B5C).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.add, color: Color(0xFF00FF85), size: 16),
+                    Icon(
+                      Icons.add,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      size: 16,
+                    ),
                     SizedBox(width: 4),
                     Text(
                       'Add',
                       style: TextStyle(
-                        color: Color(0xFF00FF85),
+                        color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
@@ -782,7 +786,7 @@ class MedicalProfilePage extends ConsumerWidget {
   Widget _buildMainFAB(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () => context.push(AppRoutes.editBasicInfo),
-      backgroundColor: const Color(0xFF00FF85),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       icon: const Icon(Icons.edit, color: Colors.black),
       label: const Text(
         'Edit Profile',
