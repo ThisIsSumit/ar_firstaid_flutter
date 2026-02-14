@@ -91,11 +91,7 @@ class ProfileScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 32),
-          // Withdraw Money Section (Responders Only)
-          if (isResponder) ...[
-            _WithdrawMoneyCard(onTap: () => context.push(AppRoutes.earnings)),
-            const SizedBox(height: 32),
-          ],
+
           // Menu Items
           _MenuItem(
             icon: Icons.person,

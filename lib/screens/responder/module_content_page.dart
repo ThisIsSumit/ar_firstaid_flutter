@@ -1,4 +1,4 @@
-import 'package:ar_firstaid_flutter/core/models/training_module.dart';
+import 'package:ar_firstaid_flutter/models/training_module.dart';
 import 'package:ar_firstaid_flutter/screens/responder/module_quiz_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';

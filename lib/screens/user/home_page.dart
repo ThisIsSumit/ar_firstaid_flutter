@@ -1,3 +1,4 @@
+import 'package:ar_firstaid_flutter/core/providers/medical_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,8 @@ class HomeDashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final medicalProfile = ref.watch(medicalProfileProvider);
+    final bool hasProfile = medicalProfile.isOnboardingComplete;
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0B),
       appBar: AppBar(
@@ -18,9 +21,12 @@ class HomeDashboard extends ConsumerWidget {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(
-              'https://i.pravatar.cc/150?u=lifelens',
+          child: GestureDetector(
+            onTap: () => context.push(AppRoutes.userProfile),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(
+                'https://i.pravatar.cc/150?u=lifelens',
+              ),
             ),
           ),
         ),
@@ -199,13 +205,15 @@ class HomeDashboard extends ConsumerWidget {
               crossAxisSpacing: 15,
               childAspectRatio: 1.3,
               children: [
-                _buildQuickCard(
-                  'Med Profile',
-                  'Allergies, Meds...',
-                  Icons.medical_services,
-                  Colors.blue,
-                  onTap: () => context.push(AppRoutes.medicalProfile),
-                ),
+                hasProfile
+                    ? _buildQuickCard(
+                        'Med Profile',
+                        '${medicalProfile.name ?? "View"} • ${medicalProfile.bloodType ?? "?"}',
+                        Icons.medical_services,
+                        Colors.blue,
+                        onTap: () => context.push(AppRoutes.medicalProfile),
+                      )
+                    : _buildAddMedicalProfileCard(context),
                 _buildQuickCard(
                   'Find AED',
                   'Nearest available...',
@@ -387,5 +395,59 @@ class HomeDashboard extends ConsumerWidget {
         ],
       ),
     ).animate().slideX(begin: 0.2, curve: Curves.easeOut);
+  }
+
+  Widget _buildAddMedicalProfileCard(BuildContext context) {
+    return InkWell(
+      onTap: () => context.push(AppRoutes.medicalOnboarding),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFFFF3B5C).withOpacity(0.2),
+              const Color(0xFFFF3B5C).withOpacity(0.05),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: const Color(0xFFFF3B5C).withOpacity(0.3),
+            width: 2,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFF3B5C).withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.add, color: Color(0xFFFF3B5C), size: 20),
+            ),
+            const Spacer(),
+            const Text(
+              'Add Med Profile',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              'Essential for emergencies',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.5),
+                fontSize: 11,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).animate().scale(delay: 200.ms, curve: Curves.fastOutSlowIn);
   }
 }

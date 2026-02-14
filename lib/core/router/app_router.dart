@@ -1,3 +1,6 @@
+import 'package:ar_firstaid_flutter/screens/medical_profile/edit_basic_info_page.dart';
+import 'package:ar_firstaid_flutter/screens/medical_profile/medical_profile_form_page.dart';
+import 'package:ar_firstaid_flutter/screens/medical_profile/medical_profile_onboarding.dart';
 import 'package:ar_firstaid_flutter/screens/responder/earnings/ways_to_earn.dart';
 import 'package:ar_firstaid_flutter/screens/responder/earnings/referral_program_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/earnings/my_referrals_page.dart';
@@ -19,14 +22,14 @@ import 'package:ar_firstaid_flutter/screens/auth/login_page.dart';
 import 'package:ar_firstaid_flutter/screens/auth/forgot_password.dart';
 import 'package:ar_firstaid_flutter/screens/auth/reset_code_verification_page.dart';
 import 'package:ar_firstaid_flutter/screens/auth/reset_password_page.dart';
-import 'package:ar_firstaid_flutter/screens/user/medical_profile_page.dart';
+import 'package:ar_firstaid_flutter/screens/medical_profile/medical_profile_page.dart';
 import 'package:ar_firstaid_flutter/screens/messages/messages_inbox.dart';
 import 'package:ar_firstaid_flutter/screens/auth/onboarding_page.dart';
 import 'package:ar_firstaid_flutter/screens/auth/onboarding_screen.dart'
     hide OnboardingPage;
 import 'package:ar_firstaid_flutter/screens/responder/profile_screen.dart';
 import 'package:ar_firstaid_flutter/screens/user/emergency/rate_emergency_page.dart';
-import 'package:ar_firstaid_flutter/screens/responder/community/responder_community_page.dart';
+import 'package:ar_firstaid_flutter/screens/community/responder_community_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/responder_dashboard_page.dart';
 import 'package:ar_firstaid_flutter/screens/responder/reward/perks_dashboard_page.dart';
 import 'package:ar_firstaid_flutter/screens/user/responder_en_route_page.dart';
@@ -90,12 +93,15 @@ class AppRoutes {
   static const String responderIdentity = '/responder-identity';
   static const String responderEthics = '/responder-ethics';
   static const String responderSuccess = '/responder-success';
+  static const String medicalOnboarding = '/medical-onboarding';
+  static const String medicalProfileForm = '/medical-profile-form';
 
   // Main Navigation - User Role
   static const String home = '/home';
   static const String aedMap = '/aed-map';
   static const String messages = '/chat';
   static const String profile = '/profile';
+  static const editBasicInfo = '/edit-basic-info';
 
   // Main Navigation - Responder Role
   static const String responderHome = '/responder-home';
@@ -327,6 +333,54 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const ProfileScreen(),
     ),
+    GoRoute(
+      path: AppRoutes.editBasicInfo,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const EditBasicInfoPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.medicalOnboarding,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const MedicalInfoOnboarding(),
+    ),
+    GoRoute(
+      path: AppRoutes.medicalProfileForm,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const MedicalProfileFormPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.userProfile,
+      builder: (context, state) => const UserProfilePage(),
+      routes: [
+        GoRoute(
+          path: 'settings',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const SettingsScreen(),
+        ),
+        GoRoute(
+          path: 'medical',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => const MedicalProfilePage(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/chat/:chatId',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        final chatId = state.pathParameters['chatId'] ?? '';
+        final name = state.uri.queryParameters['name'] ?? 'Chat';
+        final avatar = state.uri.queryParameters['avatar'] ?? '';
+
+        return ChatPage(
+          chatId: chatId,
+          peerName: name,
+          peerAvatar: avatar.isNotEmpty
+              ? avatar
+              : 'https://i.pravatar.cc/150?u=$name',
+        );
+      },
+    ),
 
     // Main Shell Routes (User Role)
     if (userRole == UserRole.user)
@@ -359,23 +413,7 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
               GoRoute(
                 path: AppRoutes.messages,
                 builder: (context, state) => const MessagesInbox(),
-                routes: [
-                  GoRoute(
-                    path: ':chatId',
-                    builder: (context, state) {
-                      final chatId = state.pathParameters['chatId'] ?? '';
-                      final name = state.uri.queryParameters['name'] ?? 'Chat';
-                      final avatar = state.uri.queryParameters['avatar'] ?? '';
-                      return ChatPage(
-                        chatId: chatId,
-                        peerName: name,
-                        peerAvatar: avatar.isNotEmpty
-                            ? avatar
-                            : 'https://i.pravatar.cc/150?u=$name',
-                      );
-                    },
-                  ),
-                ],
+                routes: [],
               ),
             ],
           ),
@@ -383,20 +421,9 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.userProfile,
-                builder: (context, state) => const UserProfilePage(),
-                routes: [
-                  GoRoute(
-                    path: 'settings',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) => const SettingsScreen(),
-                  ),
-                  GoRoute(
-                    path: 'medical',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) => const MedicalProfilePage(),
-                  ),
-                ],
+                path: AppRoutes.responderCommunity,
+
+                builder: (context, state) => const ResponderCommunityPage(),
               ),
             ],
           ),
@@ -445,23 +472,6 @@ List<RouteBase> _buildRoutes(UserRole userRole) {
               GoRoute(
                 path: AppRoutes.responderMessages,
                 builder: (context, state) => const MessagesInbox(),
-                routes: [
-                  GoRoute(
-                    path: ':chatId',
-                    builder: (context, state) {
-                      final chatId = state.pathParameters['chatId'] ?? '';
-                      final name = state.uri.queryParameters['name'] ?? 'Chat';
-                      final avatar = state.uri.queryParameters['avatar'] ?? '';
-                      return ChatPage(
-                        chatId: chatId,
-                        peerName: name,
-                        peerAvatar: avatar.isNotEmpty
-                            ? avatar
-                            : 'https://i.pravatar.cc/150?u=$name',
-                      );
-                    },
-                  ),
-                ],
               ),
             ],
           ),

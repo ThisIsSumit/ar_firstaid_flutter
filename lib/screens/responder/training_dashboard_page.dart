@@ -1,5 +1,5 @@
-import 'package:ar_firstaid_flutter/core/models/training_module.dart';
-import 'package:ar_firstaid_flutter/core/models/training_progress.dart';
+import 'package:ar_firstaid_flutter/models/training_module.dart';
+import 'package:ar_firstaid_flutter/models/training_progress.dart';
 import 'package:ar_firstaid_flutter/core/providers/training_provider.dart';
 import 'package:ar_firstaid_flutter/screens/responder/module_content_page.dart';
 import 'package:flutter/material.dart';

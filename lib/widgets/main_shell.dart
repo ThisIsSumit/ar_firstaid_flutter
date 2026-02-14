@@ -112,8 +112,8 @@ class MainShell extends ConsumerWidget {
           ),
           _buildNavItem(
             context,
-            Icons.person,
-            'Profile',
+            Icons.people_alt,
+            'Community',
             currentIndex == 3,
             () => navigationShell.goBranch(3),
           ),

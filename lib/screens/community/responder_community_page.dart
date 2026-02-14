@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/providers/chat_provider.dart';
-import '../../../core/router/app_router.dart';
+import '../../core/providers/chat_provider.dart';
+import '../../core/router/app_router.dart';
 
 class ResponderCommunityPage extends ConsumerStatefulWidget {
   const ResponderCommunityPage({super.key});
@@ -51,7 +51,7 @@ class _ResponderCommunityPageState extends ConsumerState<ResponderCommunityPage>
 
     // Navigate to chat
     context.push(
-      '${AppRoutes.responderMessages}/${chat.id}?name=${Uri.encodeComponent(chat.name)}&avatar=${Uri.encodeComponent(chat.avatar)}',
+      '/chat/${chat.id}?name=${Uri.encodeComponent(chat.name)}&avatar=${Uri.encodeComponent(chat.avatar)}',
     );
   }
 

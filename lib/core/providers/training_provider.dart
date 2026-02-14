@@ -1,4 +1,4 @@
-import 'package:ar_firstaid_flutter/core/models/training_progress.dart';
+import 'package:ar_firstaid_flutter/models/training_progress.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 final trainingProgressProvider = StateNotifierProvider<TrainingProgressNotifier, TrainingProgress>((ref) {
