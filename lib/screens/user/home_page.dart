@@ -241,8 +241,9 @@ class HomeDashboard extends ConsumerWidget {
             const SizedBox(height: 30),
             // Recent Activity
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const Icon(Icons.history, color: Color(0xFFFF3B5C), size: 18),
+                const SizedBox(width: 10),
                 const Text(
                   'Recent Activity',
                   style: TextStyle(
@@ -251,15 +252,9 @@ class HomeDashboard extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextButton(
-                  onPressed: () => context.push(AppRoutes.training),
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(color: Color(0xFFFF3B5C)),
-                  ),
-                ),
               ],
             ),
+            const SizedBox(height: 20),
             _buildActivityItem(
               'CPR Training Completed',
               'Certification updated',

@@ -7,8 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/providers/medical_profile_provider.dart';
 import '../../core/router/app_router.dart';
-import 'add_allergy_dialog.dart';
-import 'add_medication_dialog.dart';
 import 'add_condition_dialog.dart';
 import 'add_emergency_contact_dialog.dart';
 
