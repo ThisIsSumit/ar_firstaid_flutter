@@ -1,4 +1,5 @@
 # 🚑 LifeLens - AR First Aid Application
+<img width="841" height="510" alt="Image" src="https://github.com/user-attachments/assets/491369f0-045f-4e82-842d-b968f2aadbc3" />
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?style=flat&logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?style=flat&logo=dart)
